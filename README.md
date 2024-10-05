@@ -7,4 +7,6 @@ Download the required libraries
 `pip install -r requirements.txt`
 
 # Usage
-`python extract_pdf_text.py`
+1. Place PDF files into the `input` folder
+2. Run `python extract_pdf_text.py`
+3. Results will be found in `output`
