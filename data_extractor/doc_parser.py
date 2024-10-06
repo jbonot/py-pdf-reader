@@ -73,7 +73,7 @@ def parse_line(line, lines, index):
     return None, None
 
 
-def parse_doc(filename, text):
+def parse_doc(filename, text, debug):
     result = {column.value: "" for column in order}
     parts = filename.split()
     result[COLUMN.LAST_NAME.value] = parts[0].rstrip(',')
@@ -86,6 +86,9 @@ def parse_doc(filename, text):
         if cell is None:
             continue
         result[cell] = value
+    
+    if (debug):
+        return str(result)
         
     excel_line = "\t".join(result.get(column.value, "") for column in order)
     return excel_line

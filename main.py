@@ -39,10 +39,12 @@ def process_pdf_files(input_folder_path, output_folder_path, debug):
 
         if debug:
             save_debug_info(debug_path, filename, extracted_text)
-
-        excel_line = parse_doc(filename[:-4], extracted_text)
-        txt_file_path = os.path.join(output_folder_path, f"output_{timestamp}.txt")
-        save_extracted_data(txt_file_path, excel_line)
+            txt_file_path = os.path.join(debug_path, f"output_debug_{timestamp}.txt")
+        else:
+            txt_file_path = os.path.join(output_folder_path, f"output_{timestamp}.txt")
+        
+        output = parse_doc(filename[:-4], extracted_text, debug)
+        save_extracted_data(txt_file_path, output)
 
         print(f"--- [LOG] Extracted data from \"{filename}\" to \"{txt_file_path}\"")
 
