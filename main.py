@@ -3,12 +3,26 @@ import argparse
 from data_extractor.doc_parser import parse_doc
 from data_extractor.extract_scanned_pdf_text import extract_text_from_pdf
 
+input_folder_path = "input"
+output_folder_path = "output"
 output_debug_filename = "output_debug.txt"
 output_filename = "output.txt"
 
 def create_directory(path):
     """Create a directory if it doesn't already exist."""
     os.makedirs(path, exist_ok=True)
+
+def delete_file(directory, filename):
+    path = os.path.join(directory, filename)
+    try:
+        os.remove(path)
+        print(f"{path} has been deleted successfully.")
+    except FileNotFoundError:
+        pass
+    except PermissionError:
+        print(f"Permission denied: unable to delete {filename}.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 def extract_text_from_pdf_file(pdf_file_path):
     """Extract text from a PDF file."""
@@ -27,7 +41,7 @@ def save_extracted_data(output_file_path, data):
     with open(output_file_path, "a", encoding="utf-8") as file:
         file.write(data + "\n")
 
-def process_pdf_files(input_folder_path, output_folder_path, debug):
+def process_pdf_files(debug):
     """Process all PDF files in the input folder."""    
     for filename in os.listdir(input_folder_path):
         pdf_file_path = os.path.join(input_folder_path, filename)
@@ -48,27 +62,11 @@ def process_pdf_files(input_folder_path, output_folder_path, debug):
 
         print(f"--- [LOG] Extracted data from \"{filename}\" to \"{txt_file_path}\"")
 
-def delete_file(directory, filename):
-    path = os.path.join(directory, filename)
-    try:
-        os.remove(path)
-        print(f"{path} has been deleted successfully.")
-    except FileNotFoundError:
-        pass
-    except PermissionError:
-        print(f"Permission denied: unable to delete {filename}.")
-    except Exception as e:
-        print(f"An error occurred: {e}")
-
 def reset_debug(debug_path):
     create_directory(debug_path)
-    output_path = os.path.join(debug_path, output_debug_filename) if args.debug else None
     delete_file(debug_path, output_debug_filename)
 
 if __name__ == "__main__":
-    input_folder_path = "input"
-    output_folder_path = "output"
-
     parser = argparse.ArgumentParser(description='Check for debug flag.')
     parser.add_argument('--debug', action='store_true', help='Enable debug mode')
     args = parser.parse_args()
@@ -80,4 +78,4 @@ if __name__ == "__main__":
         debug_path = os.path.join(output_folder_path, "debug") if args.debug else None
         reset_debug(debug_path)
 
-    process_pdf_files(input_folder_path, output_folder_path, args.debug)
+    process_pdf_files(args.debug)
