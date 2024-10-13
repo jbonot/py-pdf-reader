@@ -5,10 +5,28 @@ This application reads all PDF files located in the `inputs` folder and exports 
 
 ## Setup
 
-### Prerequisites
-Ensure you have Python 3.x installed on your system. You can download it from [python.org](https://www.python.org/downloads/).
+### Software Prerequisites
 
-### Installation
+#### Python
+Ensure you have Python 3.x installed on your system. You can download it from [python.org](https://www.python.org/downloads/).
+- **Installation Notes**:
+  - During installation, make sure to check the option **"Add Python to PATH."** This allows you to run Python and `pip` commands from any command prompt window.
+  - After installation, you can verify that Python and `pip` were installed successfully by running the following commands in your command prompt:
+    ```bash
+    python --version
+    pip --version
+    ```
+
+#### Tesseract
+You will need to install [Tesseract OCR](https://github.com/UB-Mannheim/tesseract/wiki#tesseract-installer-for-windows), which is an open-source Optical Character Recognition (OCR) engine.
+
+- **Installation Instructions**:
+  1. Download the installer from the provided link based on your Windows architecture (32-bit or 64-bit).
+  2. Run the installer and follow the on-screen instructions.
+  3. After installation, ensure that the Tesseract installation path (usually `C:\Program Files\Tesseract-OCR`) is added to your system’s PATH environment variable. This allows the `pytesseract` library to find the Tesseract executable when running your Python scripts.
+
+
+#### Additional Dependencies
 To install the required libraries, run the following command in your terminal:
 
 ```bash
