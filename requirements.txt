@@ -1,1 +1,5 @@
-PyPDF2
+opencv-python
+PyMuPDF
+pytesseract
+Pillow
+numpy
