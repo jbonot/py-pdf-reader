@@ -4,6 +4,8 @@ from datetime import datetime
 from data_extractor.doc_parser import parse_doc
 from data_extractor.extract_scanned_pdf_text import extract_text_from_pdf
 
+output_debug_filename = "output_debug.txt"
+
 def create_directory(path):
     """Create a directory if it doesn't already exist."""
     os.makedirs(path, exist_ok=True)
@@ -39,7 +41,7 @@ def process_pdf_files(input_folder_path, output_folder_path, debug):
 
         if debug:
             save_debug_info(debug_path, filename, extracted_text)
-            txt_file_path = os.path.join(debug_path, f"output_debug_{timestamp}.txt")
+            txt_file_path = os.path.join(debug_path, output_debug_filename)
         else:
             txt_file_path = os.path.join(output_folder_path, f"output_{timestamp}.txt")
         
@@ -47,6 +49,19 @@ def process_pdf_files(input_folder_path, output_folder_path, debug):
         save_extracted_data(txt_file_path, output)
 
         print(f"--- [LOG] Extracted data from \"{filename}\" to \"{txt_file_path}\"")
+
+def reset_debug(debug_path):
+    create_directory(debug_path)
+    output_path = os.path.join(debug_path, output_debug_filename) if args.debug else None
+    try:
+        os.remove(output_path)
+        print(f"{output_path} has been deleted successfully.")
+    except FileNotFoundError:
+        pass
+    except PermissionError:
+        print(f"Permission denied: unable to delete {output_debug_filename}.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 if __name__ == "__main__":
     input_folder_path = "input"
@@ -58,8 +73,8 @@ if __name__ == "__main__":
 
     create_directory(output_folder_path)
 
-    debug_path = os.path.join(output_folder_path, "debug") if args.debug else None
     if args.debug:
-        create_directory(debug_path)
+        debug_path = os.path.join(output_folder_path, "debug") if args.debug else None
+        reset_debug(debug_path)
 
     process_pdf_files(input_folder_path, output_folder_path, args.debug)

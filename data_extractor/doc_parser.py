@@ -1,6 +1,7 @@
 from enum import Enum
 from datetime import datetime
 import re
+from data_extractor.fuzzy_compare import starts_with
 
 date_pattern = r"\b(\d{1,2}/\d{1,2}/\d{4})\b"
 
@@ -54,19 +55,27 @@ def parse_name_list(lines, start_index):
 
 def parse_line(line, lines, index):
     def extract_value(line):
-        return line.split(":", 1)[1].strip()
+        # Define a list of delimiters
+        delimiters = [':', ';', ',']
+        # Find the first occurrence of any delimiter
+        for delimiter in delimiters:
+            if delimiter in line:
+                return line.split(delimiter, 1)[1].strip()
+        
+        # Return the original line if no delimiter was found
+        return line.strip()
 
     match = re.search(date_pattern, line)
     if match:
         return COLUMN.SURGERY_DATE.value, match.group(1)
     
-    if line.startswith("Ingreep"):
+    if starts_with(line, "Ingreep", 0.55):
         return COLUMN.PROCEDURE.value, extract_value(line)
     
-    if line.startswith("Lateraliteit"):
+    if starts_with(line, "Lateraliteit", 0.7):
         return COLUMN.SIDE.value, extract_value(line).lower()
     
-    if line.startswith("Chirugen"):
+    if starts_with(line, "Chirugen"):
         chirugen = parse_name_list(lines, index + 1)
         return COLUMN.SUPERVISOR.value, ",".join(chirugen)
     
