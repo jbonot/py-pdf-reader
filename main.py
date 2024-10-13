@@ -2,7 +2,7 @@ import os
 import argparse
 from datetime import datetime
 from data_extractor.doc_parser import parse_doc
-from data_extractor.extract_pdf_text import extract_text_from_pdf
+from data_extractor.extract_scanned_pdf_text import extract_text_from_pdf
 
 def create_directory(path):
     """Create a directory if it doesn't already exist."""
