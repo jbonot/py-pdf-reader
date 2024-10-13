@@ -23,16 +23,20 @@ pip install -r requirements.txt
 ```bash
 python main.py
 ```
-3. Check Results: The extracted text files will be saved in the `output` folder.
+3. Check Results: The extracted data will be saved in the `output` folder. This text can be copied and pasted into an Excel sheet.
 
 ## Debug Mode
-To view the direct PDF to text output of each file during processing, you can enable debug mode by running:
+Intead of generating a `.txt` file with tab-separated values, you can run in debug mode to view
+- the direct PDF to text output
+- the key-value pairs of the extracted data.
+
+You can enable debug mode by running:
 
 ```bash
 python main.py --debug
 ```
 
-The debug outputs will be saved in the `output/debug` folder, providing a detailed view of the extraction process.
+The debug outputs will be saved in the `output/debug` folder.
 
 ## Notes
 - Only PDF files will be processed from the `inputs` folder. Other file types will be ignored.
