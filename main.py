@@ -1,10 +1,10 @@
 import os
 import argparse
-from datetime import datetime
 from data_extractor.doc_parser import parse_doc
 from data_extractor.extract_scanned_pdf_text import extract_text_from_pdf
 
 output_debug_filename = "output_debug.txt"
+output_filename = "output.txt"
 
 def create_directory(path):
     """Create a directory if it doesn't already exist."""
@@ -28,9 +28,7 @@ def save_extracted_data(output_file_path, data):
         file.write(data + "\n")
 
 def process_pdf_files(input_folder_path, output_folder_path, debug):
-    """Process all PDF files in the input folder."""
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")  # Format: YYYYMMDD_HHMMSS
-    
+    """Process all PDF files in the input folder."""    
     for filename in os.listdir(input_folder_path):
         pdf_file_path = os.path.join(input_folder_path, filename)
         
@@ -43,25 +41,29 @@ def process_pdf_files(input_folder_path, output_folder_path, debug):
             save_debug_info(debug_path, filename, extracted_text)
             txt_file_path = os.path.join(debug_path, output_debug_filename)
         else:
-            txt_file_path = os.path.join(output_folder_path, f"output_{timestamp}.txt")
+            txt_file_path = os.path.join(output_folder_path, output_filename)
         
         output = parse_doc(filename[:-4], extracted_text, debug)
         save_extracted_data(txt_file_path, output)
 
         print(f"--- [LOG] Extracted data from \"{filename}\" to \"{txt_file_path}\"")
 
-def reset_debug(debug_path):
-    create_directory(debug_path)
-    output_path = os.path.join(debug_path, output_debug_filename) if args.debug else None
+def delete_file(directory, filename):
+    path = os.path.join(directory, filename)
     try:
-        os.remove(output_path)
-        print(f"{output_path} has been deleted successfully.")
+        os.remove(path)
+        print(f"{path} has been deleted successfully.")
     except FileNotFoundError:
         pass
     except PermissionError:
-        print(f"Permission denied: unable to delete {output_debug_filename}.")
+        print(f"Permission denied: unable to delete {filename}.")
     except Exception as e:
         print(f"An error occurred: {e}")
+
+def reset_debug(debug_path):
+    create_directory(debug_path)
+    output_path = os.path.join(debug_path, output_debug_filename) if args.debug else None
+    delete_file(debug_path, output_debug_filename)
 
 if __name__ == "__main__":
     input_folder_path = "input"
@@ -72,6 +74,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     create_directory(output_folder_path)
+    delete_file(output_folder_path, output_filename)
 
     if args.debug:
         debug_path = os.path.join(output_folder_path, "debug") if args.debug else None
