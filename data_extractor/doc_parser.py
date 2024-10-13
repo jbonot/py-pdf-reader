@@ -33,9 +33,8 @@ order = [
 ]
 
 def parse_name_list(lines, start_index):
-    def clean_name(full_name):
-        # Remove the dash and extra spaces
-        parts = full_name.strip().replace("-", "").split()
+    def clean_name(full_name, delimiter):
+        parts = full_name.strip().replace(delimiter, "").split()
 
         # If the first part is a title, remove it
         if parts[0].endswith('.'):
@@ -45,11 +44,22 @@ def parse_name_list(lines, start_index):
         return " ".join(parts[:-1]).title()
 
     names = []
-    while start_index < len(lines) and lines[start_index].strip().startswith("-"):
-        full_name = lines[start_index].strip()  # Strip once for efficiency
-        last_name = clean_name(full_name)
-        names.append(last_name)
-        start_index += 1
+    delimiters = ['-', '~']
+    while start_index < len(lines):
+        line = lines[start_index].strip()
+
+        if not line:
+            start_index += 1
+            continue
+        
+        for delimiter in delimiters:
+            if delimiter in line:
+                names.append(clean_name(line, delimiter))
+                start_index += 1
+                break
+        else:
+            break
+
 
     return names
 
@@ -72,7 +82,7 @@ def parse_line(line, lines, index):
     if starts_with(line, "Ingreep", 0.55):
         return COLUMN.PROCEDURE.value, extract_value(line)
     
-    if starts_with(line, "Lateraliteit", 0.7):
+    if starts_with(line, "Lateraliteit"):
         return COLUMN.SIDE.value, extract_value(line).lower()
     
     if starts_with(line, "Chirugen"):
