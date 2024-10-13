@@ -20,22 +20,19 @@ def extract_text_from_pdf(pdf_path):
         img = Image.open(io.BytesIO(pix.tobytes("png")))  
         
         # Convert PIL image to OpenCV format
-        open_cv_image = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
+        processed_image = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
         
         # Convert to grayscale
-        processed_image = cv2.cvtColor(open_cv_image, cv2.COLOR_BGR2GRAY)
+        processed_image = cv2.cvtColor(processed_image, cv2.COLOR_BGR2GRAY)
         
         # Resize to improve resolution
         processed_image = cv2.resize(processed_image, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
-        
-        # Apply Gaussian Blur to reduce noise
-        processed_image = cv2.GaussianBlur(processed_image, (5, 5), 0)
         
         # Apply thresholding to binarize the image
         _, binary = cv2.threshold(processed_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
         
         # Perform OCR with custom config
-        custom_config = r'--oem 3 --psm 6'
+        custom_config = r'--oem 3 --psm 4'
         text += pytesseract.image_to_string(binary, config=custom_config)
     
     return text
