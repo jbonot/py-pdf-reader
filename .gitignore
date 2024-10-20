@@ -1,4 +1,7 @@
 input/*
 output/*
+build/*
+dist/input/*
+dist/output/*
 !.gitkeep
 __pycache__/
