@@ -42,7 +42,7 @@ def save_extracted_data(output_file_path, data):
         file.write(data + "\n")
 
 def process_pdf_files(debug):
-    """Process all PDF files in the input folder."""    
+    """Process all PDF files in the input folder."""
     for filename in os.listdir(input_folder_path):
         pdf_file_path = os.path.join(input_folder_path, filename)
         
@@ -61,6 +61,7 @@ def process_pdf_files(debug):
         save_extracted_data(txt_file_path, output)
 
         print(f"--- [LOG] Extracted data from \"{filename}\" to \"{txt_file_path}\"")
+    return txt_file_path or None
 
 def reset_debug(debug_path):
     create_directory(debug_path)
@@ -78,4 +79,6 @@ if __name__ == "__main__":
         debug_path = os.path.join(output_folder_path, "debug") if args.debug else None
         reset_debug(debug_path)
 
-    process_pdf_files(args.debug)
+    output_file_path = process_pdf_files(args.debug)
+    if output_file_path:
+        os.startfile(output_file_path)
