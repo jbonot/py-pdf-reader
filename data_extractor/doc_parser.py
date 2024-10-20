@@ -97,7 +97,7 @@ def parse_line(line, lines, index):
     return None, None
 
 
-def parse_doc(filename, text, debug):
+def parse_doc(filename, text, debug=False):
     result = {column.value: "" for column in order}
     parts = filename.split()
     result[COLUMN.LAST_NAME.value] = parts[0].rstrip(',')
