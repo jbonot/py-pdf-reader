@@ -2,6 +2,7 @@
 set shell := ["cmd.exe", "/c"]
 
 build:
+    pip freeze > requirements.txt
     pyinstaller app.spec
 
 run mode="normal":
