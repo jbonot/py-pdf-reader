@@ -83,7 +83,12 @@ def parse_line(line, lines, index):
         return COLUMN.PROCEDURE.value, extract_value(line)
     
     if starts_with(line, "Lateraliteit"):
-        return COLUMN.SIDE.value, extract_value(line).lower()
+        col, value = COLUMN.SIDE.value, extract_value(line).lower()
+        if starts_with(value, "links"):
+            return col, "links"
+        if starts_with(value, "rechts"):
+            return col, "rechts"
+        return col, value
     
     if starts_with(line, "Chirugen"):
         chirugen = parse_name_list(lines, index + 1)
