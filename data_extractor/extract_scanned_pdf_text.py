@@ -1,12 +1,26 @@
+from PIL import Image
+import configparser
 import cv2
 import fitz  # PyMuPDF
-import pytesseract
-from PIL import Image
 import io
 import numpy as np
+import os
+import pytesseract
 
-# Set the path to the Tesseract executable if not added to PATH
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'  # Adjust if necessary
+config_file = 'config.ini'
+example_config_file = 'config.ini.example'
+
+config = configparser.ConfigParser()
+if os.path.exists(config_file):
+    config.read(config_file)
+else:
+    print(f"{config_file} not found. Falling back to {example_config_file}.")
+    config.read(example_config_file)
+
+try:
+    pytesseract.pytesseract.tesseract_cmd = config['Tesseract']['tesseract_cmd']
+except KeyError as e:
+    pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 def extract_text_from_pdf(pdf_path):
     pdf_document = fitz.open(pdf_path)
