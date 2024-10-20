@@ -1,7 +1,6 @@
 from tkinter import filedialog, scrolledtext
 import queue
 import threading
-import time
 import tkinter as tk
 
 from data_extractor.doc_parser import parse_doc

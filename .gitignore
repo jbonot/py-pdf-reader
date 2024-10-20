@@ -1,7 +1,6 @@
 input/*
 output/*
 build/*
-dist/input/*
-dist/output/*
+config.ini
 !.gitkeep
 __pycache__/

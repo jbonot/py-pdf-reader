@@ -2,8 +2,10 @@
 set shell := ["cmd.exe", "/c"]
 
 build:
-    pyinstaller main.spec
+    pyinstaller app.spec
 
 run mode="normal":
-    python main.py {{ if mode == "debug" {'--debug'} else {''} }}
+    python {{ if mode == "debug" {'main.py --debug'} else if mode == "test" {'main.py'} else {'app.py'} }}
+
+
 
