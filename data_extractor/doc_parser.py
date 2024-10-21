@@ -99,10 +99,19 @@ def parse_line(line, lines, index):
 
 def parse_doc(filename, text, debug=False):
     result = {column.value: "" for column in order}
-    parts = filename.split()
-    result[COLUMN.LAST_NAME.value] = parts[0].rstrip(',')
-    result[COLUMN.FIRST_NAME.value] = parts[1]
-    result[COLUMN.DOB.value] = datetime.strptime(parts[2], "%d.%m.%Y").strftime("%d/%m/%Y")
+
+    # Format: <last name>, <first name>, <dob>
+    pattern = r'^(.*?),\s*(.*?)\s+(\d{2}\.\d{2}\.\d{4})$'
+    match = re.match(pattern, filename)
+
+    if match:
+        last_name = match.group(1).rstrip(',')
+        first_name = match.group(2)
+        dob = datetime.strptime(match.group(3), "%d.%m.%Y").strftime("%d/%m/%Y")
+        
+        result[COLUMN.LAST_NAME.value] = last_name
+        result[COLUMN.FIRST_NAME.value] = first_name
+        result[COLUMN.DOB.value] = dob
 
     lines = text.splitlines()
     for index, line in enumerate(lines):
