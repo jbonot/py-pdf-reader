@@ -37,19 +37,18 @@ order = [
 
 
 def parse_name_list(lines, start_index):
-    def clean_name(full_name, delimiter):
-        parts = full_name.strip().replace(delimiter, "").split()
-
-        # If the first part is a title, remove it
-        if parts[0].endswith("."):
-            parts = parts[1:]
-
-        # Join all but the last part (which is assumed to be the first name)
-        # as the last name
-        return " ".join(parts[:-1]).title()
+    def clean_name(full_name, bullet_points):
+        # Format: <bullet point> <title> <last name> <first name>
+        pattern = rf"^[{"".join(bullet_points)}]*\s*(\S+\.)?\s*(.*)\s+(\S+)$"
+        match = re.match(pattern, full_name)
+        if match:
+            # Return last name
+            return match.group(2)
+        else:
+            return None
 
     names = []
-    delimiters = ["-", "~"]
+    bullet_points = ("-", "~")
     while start_index < len(lines):
         line = lines[start_index].strip()
 
@@ -57,11 +56,9 @@ def parse_name_list(lines, start_index):
             start_index += 1
             continue
 
-        for delimiter in delimiters:
-            if delimiter in line:
-                names.append(clean_name(line, delimiter))
-                start_index += 1
-                break
+        if line.startswith(bullet_points):
+            names.append(clean_name(line, bullet_points))
+            start_index += 1
         else:
             break
 
