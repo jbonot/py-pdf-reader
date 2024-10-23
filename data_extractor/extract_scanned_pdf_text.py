@@ -30,6 +30,12 @@ def extract_text_from_pdf(pdf_path):
     pdf_document = fitz.open(pdf_path)
     text = ""
 
+    # Check for available languages
+    available_languages = pytesseract.get_languages(config="")
+    desired_languages = ("nld", "fra")
+    langs = [lang for lang in desired_languages if lang in available_languages]
+    lang = "+".join(langs) or None
+
     for page_number in range(len(pdf_document)):
         page = pdf_document[page_number]
         pix = page.get_pixmap()  # Convert page to pixmap
@@ -55,6 +61,6 @@ def extract_text_from_pdf(pdf_path):
 
         # Perform OCR with custom config
         custom_config = r"--oem 3 --psm 4"
-        text += pytesseract.image_to_string(binary, config=custom_config)
+        text += pytesseract.image_to_string(binary, lang=lang, config=custom_config)
 
     return text
