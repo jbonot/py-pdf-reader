@@ -4,3 +4,6 @@ build/*
 config.ini
 !.gitkeep
 __pycache__/
+
+# editor settings
+.vscode
