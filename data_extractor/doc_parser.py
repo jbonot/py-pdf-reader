@@ -68,11 +68,11 @@ def parse_name_list(lines, start_index):
 def parse_line(line, lines, index):
     def extract_value(line):
         # Define a regex pattern with the delimiters
-        pattern = r"[:;,]\s*(\S+)"
+        pattern = r"[:;,]\s*(.*)"
         match = re.search(pattern, line)
 
         if match:
-            return match.group(1)
+            return match.group(1).strip()
 
         # Return the entire line
         return line.strip()
