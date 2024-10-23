@@ -2,6 +2,7 @@
 set shell := ["cmd.exe", "/c"]
 
 build:
+    just check
     pip freeze > requirements.txt
     pyinstaller app.spec
 

@@ -1,6 +1,4 @@
-import configparser
 import io
-import os
 
 import cv2
 import fitz  # PyMuPDF
@@ -8,15 +6,7 @@ import numpy as np
 import pytesseract
 from PIL import Image
 
-config_file = "config.ini"
-example_config_file = "config.ini.example"
-
-config = configparser.ConfigParser()
-if os.path.exists(config_file):
-    config.read(config_file)
-else:
-    print(f"{config_file} not found. Falling back to {example_config_file}.")
-    config.read(example_config_file)
+from data_extractor.config import config
 
 try:
     pytesseract.pytesseract.tesseract_cmd = config["Tesseract"]["tesseract_cmd"]
