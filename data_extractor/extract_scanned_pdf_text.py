@@ -60,7 +60,7 @@ def extract_text_from_pdf(pdf_path):
         )
 
         # Perform OCR with custom config
-        custom_config = r"--oem 3 --psm 4"
+        custom_config = r"--psm 6"
         text += pytesseract.image_to_string(binary, lang=lang, config=custom_config)
 
     return text
