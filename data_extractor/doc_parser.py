@@ -52,7 +52,7 @@ def parse_name_list(lines, start_index):
         match = re.match(pattern, full_name)
         if match:
             # Return last name
-            return match.group(2)
+            return match.group(2).title()
         else:
             return None
 
