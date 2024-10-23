@@ -36,6 +36,15 @@ order = [
 ]
 
 
+def get_first_nonempty_line(lines, start_index):
+    while start_index < len(lines):
+        line = lines[start_index].strip()
+        if line:
+            return line
+
+        start_index += 1
+
+
 def parse_name_list(lines, start_index):
     def clean_name(full_name, bullet_points):
         # Format: <bullet point> <title> <last name> <first name>
@@ -81,8 +90,11 @@ def parse_line(line, lines, index, result):
     if match and not result[COLUMN.SURGERY_DATE.value]:
         return COLUMN.SURGERY_DATE.value, match.group(1)
 
-    if starts_with(line, "Ingreep", 0.55) and not result[COLUMN.PROCEDURE.value]:
-        return COLUMN.PROCEDURE.value, extract_value(line)
+    # Special case:
+    # "Ingreep" is poorly parsed by OCR. Parse the line that comes after "Algemeen"
+    if starts_with(line, "Algemeen") and not result[COLUMN.PROCEDURE.value]:
+        procedure_line = get_first_nonempty_line(lines, index + 1)
+        return COLUMN.PROCEDURE.value, extract_value(procedure_line)
 
     if starts_with(line, "Lateraliteit") and not result[COLUMN.SIDE.value]:
         col, value = COLUMN.SIDE.value, extract_value(line).lower()
