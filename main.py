@@ -10,11 +10,6 @@ output_debug_filename = "output_debug.txt"
 output_filename = "output.txt"
 
 
-def create_directory(path):
-    """Create a directory if it doesn't already exist."""
-    os.makedirs(path, exist_ok=True)
-
-
 def delete_file(directory, filename):
     path = os.path.join(directory, filename)
     try:
@@ -72,7 +67,7 @@ def process_pdf_files(debug):
 
 
 def reset_debug(debug_path):
-    create_directory(debug_path)
+    os.makedirs(debug_path, exist_ok=True)
     delete_file(debug_path, output_debug_filename)
 
 
@@ -81,7 +76,7 @@ if __name__ == "__main__":
     parser.add_argument("--debug", action="store_true", help="Enable debug mode")
     args = parser.parse_args()
 
-    create_directory(output_folder_path)
+    os.makedirs(output_folder_path, exist_ok=True)
     delete_file(output_folder_path, output_filename)
 
     if args.debug:
