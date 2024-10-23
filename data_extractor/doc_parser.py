@@ -65,7 +65,7 @@ def parse_name_list(lines, start_index):
     return names
 
 
-def parse_line(line, lines, index):
+def parse_line(line, lines, index, result):
     def extract_value(line):
         # Define a regex pattern with the delimiters
         pattern = r"[:;,]\s*(.*)"
@@ -78,13 +78,13 @@ def parse_line(line, lines, index):
         return line.strip()
 
     match = re.search(date_pattern, line)
-    if match:
+    if match and not result[COLUMN.SURGERY_DATE.value]:
         return COLUMN.SURGERY_DATE.value, match.group(1)
 
-    if starts_with(line, "Ingreep", 0.55):
+    if starts_with(line, "Ingreep", 0.55) and not result[COLUMN.PROCEDURE.value]:
         return COLUMN.PROCEDURE.value, extract_value(line)
 
-    if starts_with(line, "Lateraliteit"):
+    if starts_with(line, "Lateraliteit") and not result[COLUMN.SIDE.value]:
         col, value = COLUMN.SIDE.value, extract_value(line).lower()
         if starts_with(value, "links"):
             return col, "links"
@@ -92,7 +92,7 @@ def parse_line(line, lines, index):
             return col, "rechts"
         return col, value
 
-    if starts_with(line, "Chirugen"):
+    if starts_with(line, "Chirugen") and not result[COLUMN.SUPERVISOR.value]:
         chirugen = parse_name_list(lines, index + 1)
         return COLUMN.SUPERVISOR.value, ",".join(chirugen)
 
@@ -117,7 +117,7 @@ def parse_doc(filename, text, debug=False):
 
     lines = text.splitlines()
     for index, line in enumerate(lines):
-        cell, value = parse_line(line.strip(), lines, index)
+        cell, value = parse_line(line.strip(), lines, index, result)
         if cell is None:
             continue
         result[cell] = value
