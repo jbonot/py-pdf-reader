@@ -1,2 +1,5 @@
 [Tesseract]
 tesseract_cmd = C:\Program Files\Tesseract-OCR\tesseract.exe
+
+[Document]
+supervisors=Shakespeare,Atwood,Skywalker,Baggins

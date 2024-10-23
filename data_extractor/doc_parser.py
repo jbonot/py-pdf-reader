@@ -2,7 +2,16 @@ import re
 from datetime import datetime
 from enum import Enum
 
+from data_extractor.config import config
 from data_extractor.fuzzy_compare import starts_with
+
+try:
+    supervisors = [
+        name.strip().title() for name in config["Document"]["supervisors"].split(",")
+    ]
+except KeyError:
+    supervisors = []
+
 
 date_pattern = r"\b(\d{1,2}/\d{1,2}/\d{4})\b"
 
@@ -105,8 +114,14 @@ def parse_line(line, lines, index, result):
         return col, value
 
     if starts_with(line, "Chirugen") and not result[COLUMN.SUPERVISOR.value]:
-        chirugen = parse_name_list(lines, index + 1)
-        return COLUMN.SUPERVISOR.value, ",".join(chirugen)
+        surgeons = parse_name_list(lines, index + 1)
+        for index, surgeon in enumerate(surgeons):
+            for name in supervisors:
+                if starts_with(surgeon, name):
+                    surgeons[index] = name.title()
+                    break
+
+        return COLUMN.SUPERVISOR.value, ",".join(surgeons)
 
     return None, None
 
