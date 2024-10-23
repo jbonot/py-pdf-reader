@@ -7,12 +7,6 @@ from data_extractor.doc_parser import parse_doc
 from data_extractor.extract_scanned_pdf_text import extract_text_from_pdf
 
 
-def extract_text_from_pdf_file(pdf_file_path):
-    """Extract text from a PDF file."""
-    with open(pdf_file_path, "rb") as pdf_file:
-        return extract_text_from_pdf(pdf_file)
-
-
 class FileReaderApp:
     def __init__(self, root):
         self.root = root
@@ -89,7 +83,10 @@ class FileReaderApp:
                 text=f"Processing {index + 1} of {len(file_paths)} files..."
                 " Please wait."
             )
-            extracted_text = extract_text_from_pdf_file(file_path)
+
+            with open(file_path, "rb") as pdf_file:
+                extracted_text = extract_text_from_pdf(pdf_file)
+
             file_name = file_path.split("/")[-1]  # Get the file name from the full path
             output = parse_doc(file_name[:-4], extracted_text)
             self.text_area.insert(

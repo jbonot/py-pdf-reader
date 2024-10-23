@@ -23,24 +23,12 @@ def delete_file(directory, filename):
         print(f"An error occurred: {e}")
 
 
-def extract_text_from_pdf_file(pdf_file_path):
-    """Extract text from a PDF file."""
-    with open(pdf_file_path, "rb") as pdf_file:
-        return extract_text_from_pdf(pdf_file)
-
-
 def save_debug_info(debug_path, filename, extracted_text):
     """Save extracted text to a debug file."""
     debug_file_path = os.path.join(debug_path, filename[:-4] + ".txt")
     with open(debug_file_path, "w", encoding="utf-8") as txt_file:
         txt_file.write(extracted_text)
     print(f'--- [DEBUG] Extracted text from "{filename}" to "{debug_file_path}"')
-
-
-def save_extracted_data(output_file_path, data):
-    """Append extracted data to the output file."""
-    with open(output_file_path, "a", encoding="utf-8") as file:
-        file.write(data + "\n")
 
 
 def process_pdf_files(debug):
@@ -51,7 +39,8 @@ def process_pdf_files(debug):
         if not (os.path.isfile(pdf_file_path) and pdf_file_path.endswith(".pdf")):
             continue
 
-        extracted_text = extract_text_from_pdf_file(pdf_file_path)
+        with open(pdf_file_path, "rb") as pdf_file:
+            extracted_text = extract_text_from_pdf(pdf_file)
 
         if debug:
             save_debug_info(debug_path, filename, extracted_text)
@@ -60,7 +49,9 @@ def process_pdf_files(debug):
             txt_file_path = os.path.join(output_folder_path, output_filename)
 
         output = parse_doc(filename[:-4], extracted_text, debug)
-        save_extracted_data(txt_file_path, output)
+
+        with open(txt_file_path, "a", encoding="utf-8") as file:
+            file.write(output + "\n")
 
         print(f'--- [LOG] Extracted data from "{filename}" to "{txt_file_path}"')
     return txt_file_path or None
