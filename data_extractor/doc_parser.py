@@ -3,15 +3,22 @@ from datetime import datetime
 from enum import Enum
 
 from data_extractor.config import config
-from data_extractor.fuzzy_compare import starts_with
+from data_extractor.fuzzy_compare import contains, starts_with
 
-try:
-    supervisors = [
-        name.strip().title() for name in config["Document"]["supervisors"].split(",")
-    ]
-except KeyError:
-    supervisors = []
 
+def get_config_value(key):
+    if "Document" in config and key in config["Document"]:
+        return [item.strip().title() for item in config["Document"][key].split(",")]
+    return []
+
+
+supervisors = get_config_value("supervisors")
+bodyparts = {}
+bodyparts["Knie"] = get_config_value("keywords_knee")
+bodyparts["Schouder"] = get_config_value("keywords_shoulder")
+bodyparts["Elleboog"] = get_config_value("keywords_elbow")
+bodyparts["Pols/hand"] = get_config_value("keywords_hand")
+bodyparts["Voet"] = get_config_value("keywords_foot")
 
 date_pattern = r"\b(\d{1,2}/\d{1,2}/\d{4})\b"
 
@@ -43,6 +50,14 @@ order = [
     COLUMN.SURGEON_ASSISTANT,
     COLUMN.MATERIAL_COMPANY,
 ]
+
+
+def get_bodypart(procedure):
+    for key, value in bodyparts.items():
+        for keyword in value:
+            if contains(procedure, keyword):
+                return key
+    return None
 
 
 def get_first_nonempty_line(lines, start_index):
@@ -147,6 +162,10 @@ def parse_doc(filename, text, debug=False):
         cell, value = parse_line(line.strip(), lines, index, result)
         if cell is None:
             continue
+        if cell is COLUMN.PROCEDURE.value:
+            bodypart = get_bodypart(value)
+            if bodypart:
+                result[COLUMN.JOINT.value] = bodypart
         result[cell] = value
 
     if debug:

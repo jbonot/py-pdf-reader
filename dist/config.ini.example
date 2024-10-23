@@ -1,2 +1,10 @@
 [Tesseract]
 tesseract_cmd = C:\Program Files\Tesseract-OCR\tesseract.exe
+
+[Document]
+supervisors=Shakespeare,Atwood,Skywalker,Baggins
+keywords_knee=meniscus, knieprothese, kruisband
+keywords_shoulder=subacromiale, decompressie, caput longum
+keywords_elbow=epicondylitis, elleboog, cubitale tunnel
+keywords_hand=DIP, arthrodese, pulley, cyste
+keywords_foot=calcaneumfractuur, hallux, valgus
