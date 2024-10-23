@@ -67,14 +67,14 @@ def parse_name_list(lines, start_index):
 
 def parse_line(line, lines, index):
     def extract_value(line):
-        # Define a list of delimiters
-        delimiters = [":", ";", ","]
-        # Find the first occurrence of any delimiter
-        for delimiter in delimiters:
-            if delimiter in line:
-                return line.split(delimiter, 1)[1].strip()
+        # Define a regex pattern with the delimiters
+        pattern = r"[:;,]\s*(\S+)"
+        match = re.search(pattern, line)
 
-        # Return the original line if no delimiter was found
+        if match:
+            return match.group(1)
+
+        # Return the entire line
         return line.strip()
 
     match = re.search(date_pattern, line)
