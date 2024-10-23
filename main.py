@@ -89,5 +89,3 @@ if __name__ == "__main__":
         reset_debug(debug_path)
 
     output_file_path = process_pdf_files(args.debug)
-    if output_file_path:
-        os.startfile(output_file_path)
