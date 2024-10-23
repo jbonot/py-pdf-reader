@@ -1,7 +1,7 @@
-from tkinter import filedialog, scrolledtext
 import queue
 import threading
 import tkinter as tk
+from tkinter import filedialog, scrolledtext
 
 from data_extractor.doc_parser import parse_doc
 from data_extractor.extract_scanned_pdf_text import extract_text_from_pdf
@@ -39,7 +39,7 @@ class FileReaderApp:
         root.grid_rowconfigure(1, weight=1)  # Allow row 1 to expand
         root.grid_columnconfigure(0, weight=1)  # Allow column 0 to expand
 
-        # Create a frame for the button to position it at the bottom right of the text area
+        # Position button at the bottom right of the text area
         self.button_frame = tk.Frame(root)
         self.button_frame.grid(
             row=2, column=0, sticky="se"
@@ -86,7 +86,8 @@ class FileReaderApp:
             if not (file_path.endswith(".pdf")):
                 continue
             self.status_label.config(
-                text=f"Processing {index + 1} of {len(file_paths)} files... Please wait."
+                text=f"Processing {index + 1} of {len(file_paths)} files..."
+                " Please wait."
             )
             extracted_text = extract_text_from_pdf_file(file_path)
             file_name = file_path.split("/")[-1]  # Get the file name from the full path

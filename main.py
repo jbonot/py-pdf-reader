@@ -1,5 +1,6 @@
-import os
 import argparse
+import os
+
 from data_extractor.doc_parser import parse_doc
 from data_extractor.extract_scanned_pdf_text import extract_text_from_pdf
 

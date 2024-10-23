@@ -1,6 +1,7 @@
-from enum import Enum
-from datetime import datetime
 import re
+from datetime import datetime
+from enum import Enum
+
 from data_extractor.fuzzy_compare import starts_with
 
 date_pattern = r"\b(\d{1,2}/\d{1,2}/\d{4})\b"
@@ -43,7 +44,8 @@ def parse_name_list(lines, start_index):
         if parts[0].endswith("."):
             parts = parts[1:]
 
-        # Join all but the last part (which is assumed to be the first name) as the last name
+        # Join all but the last part (which is assumed to be the first name)
+        # as the last name
         return " ".join(parts[:-1]).title()
 
     names = []

@@ -1,11 +1,12 @@
-from PIL import Image
 import configparser
+import io
+import os
+
 import cv2
 import fitz  # PyMuPDF
-import io
 import numpy as np
-import os
 import pytesseract
+from PIL import Image
 
 config_file = "config.ini"
 example_config_file = "config.ini.example"
@@ -19,7 +20,7 @@ else:
 
 try:
     pytesseract.pytesseract.tesseract_cmd = config["Tesseract"]["tesseract_cmd"]
-except KeyError as e:
+except KeyError:
     pytesseract.pytesseract.tesseract_cmd = (
         r"C:\Program Files\Tesseract-OCR\tesseract.exe"
     )
