@@ -29,7 +29,7 @@ class FileReaderApp(TKMT.ThemedTKinterFrame):
             self.text_area_frame.master, width=100, height=10
         )
         self.text_area.grid(row=0, column=0, sticky="nsew")
-        self.output_frame.Button(
+        self.copy_button = self.output_frame.Button(
             "Copy Text", self.copy_to_clipboard, args=("state", tk.DISABLED), sticky="e"
         )
 
