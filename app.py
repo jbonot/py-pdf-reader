@@ -1,40 +1,41 @@
 import queue
 import threading
 import tkinter as tk
-from tkinter import filedialog, scrolledtext
+from tkinter import filedialog, scrolledtext, ttk
 
 from data_extractor.doc_parser import parse_doc
 from data_extractor.extract_scanned_pdf_text import extract_text_from_pdf
 
 
-class FileReaderApp:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("PDF Report Extraction")
+class FileReaderApp(tk.Tk):
+    def __init__(self):
+        super().__init__()
+
+        self.title("PDF Report Extraction")
 
         # Set default window size (width x height)
-        self.root.geometry("850x275")
+        self.geometry("850x275")
 
         # Create a button to select files
-        self.select_button = tk.Button(
-            root, text="Select Files", command=self.select_files
+        self.select_button = ttk.Button(
+            self, text="Select Files", command=self.select_files
         )
         self.select_button.grid(row=0, column=0, pady=10)
 
         # Create a scrolled text area to display file names
-        self.text_area = scrolledtext.ScrolledText(root, width=100, height=10)
+        self.text_area = scrolledtext.ScrolledText(self, width=100, height=10)
         self.text_area.grid(row=1, column=0, pady=10, sticky="nsew")
 
         # Configure grid to allow resizing
-        root.grid_rowconfigure(1, weight=1)
-        root.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(1, weight=1)
+        self.grid_columnconfigure(0, weight=1)
 
         # Position button at the bottom right of the text area
-        self.button_frame = tk.Frame(root)
+        self.button_frame = tk.Frame(self)
         self.button_frame.grid(row=2, column=0, sticky="se")
 
         # Create a button to copy the text area contents
-        self.copy_button = tk.Button(
+        self.copy_button = ttk.Button(
             self.button_frame,
             text="Copy Text",
             command=self.copy_to_clipboard,
@@ -43,11 +44,11 @@ class FileReaderApp:
         self.copy_button.pack(side=tk.RIGHT, padx=5)
 
         # Divider
-        self.status_divider = tk.Frame(root, height=2, bd=1, bg="grey")
+        self.status_divider = tk.Frame(self, height=2, bd=1, bg="grey")
         self.status_divider.grid(row=3, column=0, sticky="ew", padx=5, pady=(10, 5))
 
         # Label to show status
-        self.status_label = tk.Label(root, text="Ready", fg="blue")
+        self.status_label = tk.Label(self, text="Ready", fg="blue")
         self.status_label.grid(row=4, column=0, sticky="se", padx=10, pady=5)
 
         # Queue for communication between threads
@@ -84,7 +85,7 @@ class FileReaderApp:
         # Reset the status label and cursor
         self.check_text()
         self.status_label.config(text="Done.")
-        self.root.config(cursor="")
+        self.config(cursor="")
 
     def check_text(self):
         # Check if the text area has content
@@ -98,16 +99,15 @@ class FileReaderApp:
         text = self.text_area.get(1.0, tk.END)  # Get all text from the text area
         # Clear the clipboard and append the new text
         if text:
-            self.root.clipboard_clear()
-            self.root.clipboard_append(text.strip())
+            self.clipboard_clear()
+            self.clipboard_append(text.strip())
             self.copy_button.config(text="Copied!")
-            self.root.after(2000, self.reset_button_text)
+            self.after(2000, self.reset_button_text)
 
     def reset_button_text(self):
         self.copy_button.config(text="Copy Text")
 
 
 if __name__ == "__main__":
-    root = tk.Tk()
-    app = FileReaderApp(root)
-    root.mainloop()
+    app = FileReaderApp()
+    app.mainloop()
