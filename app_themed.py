@@ -30,7 +30,10 @@ class FileReaderApp(TKMT.ThemedTKinterFrame):
         )
         self.text_area.grid(row=0, column=0, sticky="nsew")
         self.copy_button = self.output_frame.Button(
-            "Copy Text", self.copy_to_clipboard, args=("state", tk.DISABLED), sticky="e"
+            "Copy Text",
+            self.copy_to_clipboard,
+            widgetkwargs={"state": tk.DISABLED},
+            sticky="e",
         )
 
         self.status_frame = self.addFrame("Status", pady=(10, 10))
