@@ -22,4 +22,5 @@ pywin32-ctypes==0.2.3
 RapidFuzz==3.10.0
 ruff==0.7.0
 setuptools==75.2.0
+TKinterModernThemes==1.10.4
 tomlkit==0.13.2
