@@ -84,7 +84,7 @@ class FileReaderApp(TKMT.ThemedTKinterFrame):
         # Reset the status label and cursor
         self.check_text()
         self.status_label.config(text="Done.")
-        self.config(cursor="")
+        self.root.config(cursor="")
 
     def check_text(self):
         # Check if the text area has content
@@ -98,10 +98,10 @@ class FileReaderApp(TKMT.ThemedTKinterFrame):
         text = self.text_area.get(1.0, tk.END)  # Get all text from the text area
         # Clear the clipboard and append the new text
         if text:
-            self.clipboard_clear()
-            self.clipboard_append(text.strip())
+            self.root.clipboard_clear()
+            self.root.clipboard_append(text.strip())
             self.copy_button.config(text="Copied!")
-            self.after(2000, self.reset_button_text)
+            self.root.after(2000, self.reset_button_text)
 
     def reset_button_text(self):
         self.copy_button.config(text="Copy Text")
