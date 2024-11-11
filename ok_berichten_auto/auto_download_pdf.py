@@ -81,8 +81,6 @@ class AutoDownloadPdf:
         time.sleep(1)
         
         if file_name:
-            print(file_name)
-
             if self.pdf_destination and not self.is_file_destination_set:
                 # Set destination
                 pag.keyDown('alt')
@@ -107,6 +105,9 @@ class AutoDownloadPdf:
                 pag.press('esc')
             else:
                 self.is_file_destination_set = True
+
+            print("Done:" , file_name)
+            pag.click(2543, 91) # Close dossier
 
         else:
             print("Patient info not found")
