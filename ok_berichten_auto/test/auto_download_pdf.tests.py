@@ -42,10 +42,10 @@ class TestAutoDownloadPdf:
         result = self.app.go_to_calendar(self.app.date_entries[0])  # Use the first entry for testing
         self.assert_test(result, 'TestGoToCalendar')
 
-    def test_go_to_patient(self):
+    def test_go_to_dossier(self):
         """Test GoToPatient function"""
-        result = self.app.go_to_patient(0, 0)  # Example of calling this function
-        self.assert_test(result, 'TestGoToPatient')
+        result = self.app.go_to_dossier(0, 0) 
+        self.assert_test(result, 'TestGoToDossier')
 
     def run_tests(self):
         """Run all tests"""

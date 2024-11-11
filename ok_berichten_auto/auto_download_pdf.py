@@ -39,9 +39,9 @@ class AutoDownloadPdf:
             print(f"Window not found: {title}")
             exit()
 
-    def go_to_patient(self, start_x, start_y):
+    def go_to_dossier(self, start_x, start_y):
         pag.rightClick(start_x, start_y)
-        pag.click(start_x + 90, start_y + 32)  # "Selecteer patiënt"
+        pag.click(start_x + 90, start_y + 32)
         pag.press('f6')
 
     def go_to_calendar(self, entry):
