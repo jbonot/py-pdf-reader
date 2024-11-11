@@ -61,14 +61,17 @@ def go_to_report(date):
 
 def download_file():
     file_name = ""
-    patient = get_patient_data(r"(<age>) (DD/MM/YYY) Last Name, First Name (<lang>)")
+    text = read_text_at_position([257,51, 644, 73])
+    patient = get_patient_data(text)
     if patient:
         file_name = f"{patient['name']} {patient['dob']}"
-
-    # Click "Afdrukken" (print)
-    # Click "Nota view" (note view)
+        
+    pag.click(597, 124)  # "Afdrukken"
+    pag.click(627, 235)  # "Nota view"
+    time.sleep(3)
+    pag.click(1430, 833)
     time.sleep(1)
-    activate_or_exit("Print")
+    
     
     if file_name:
         pag.typewrite(file_name)
