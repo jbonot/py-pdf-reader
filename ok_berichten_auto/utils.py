@@ -122,7 +122,7 @@ def get_hocr_content(bbox):
 
 def read_text_at_position(bbox):
     # Capture screen region specified by bounding box
-    screenshot = ImageGrab.grab(bbox=(bbox['x'], bbox['y'], bbox['x'] + bbox['width'], bbox['y'] + bbox['height']))
+    screenshot = ImageGrab.grab(bbox=bbox)
     file_path = "tmp.png"
     screenshot.save(file_path)
 

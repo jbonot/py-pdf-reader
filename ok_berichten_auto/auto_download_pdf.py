@@ -1,14 +1,14 @@
 import pyautogui as pag
 import time
 from pywinauto import Application
+from pywinauto.findwindows import find_windows
 
-from ok_berichten_auto.utils import get_patient_data, load_config, load_dates, locate_text_at_position
+from ok_berichten_auto.utils import get_patient_data, load_config, load_dates, locate_text_at_position, read_text_at_position
 
 # Ensure you have installed required packages:
 # pip install pyautogui pytesseract pywinauto
 
 def download_all_entries():
-    processed = []
     dates = load_dates('dates.txt')
     for entry in dates:
         go_to_calendar(entry)
@@ -87,10 +87,11 @@ def activate_app(filename):
         exit()
 
     title = config['windowTitle']
-    try:
-        app = Application().connect(title=title)
-        app.window(title=title).set_focus()
+    windows = find_windows(title_re=f"^{title}")
+    if windows:
+        app = Application().connect(handle=windows[0])
+        app.window(handle=windows[0]).set_focus()
         return 1
-    except Exception:
+    else:
         print(f"Window not found: {title}")
         exit()
