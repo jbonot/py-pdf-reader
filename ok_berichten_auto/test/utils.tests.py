@@ -38,8 +38,8 @@ class TestUtils:
         self.assert_test(len(self.config.get("windowTitle").strip()) > 0, "value", "TestLoadConfig")
 
 
-    def test_get_patient_data(self):
-        """Test get_patient_data function"""
+    def test_get_person_data(self):
+        """Test get_person_data function"""
         cases = [
             ["24j (01/01/2000) DOE, JANE (NL)", {
                 "age": "24j",
@@ -51,16 +51,16 @@ class TestUtils:
         ]
         
         for index, (input_text, expected_data) in enumerate(cases):
-            result = utils.get_patient_data(input_text)
+            result = utils.get_person_data(input_text)
             if result:
                 self.assert_test(
                     result['age'] == expected_data['age'] and
                     result['dob'] == expected_data['dob'] and
                     result['name'] == expected_data['name'],
-                    index, "TestGetPatientData"
+                    index, "TestGetPersonData"
                 )
             else:
-                self.assert_test(result == expected_data, index, "TestGetPatientData")
+                self.assert_test(result == expected_data, index, "TestGetPersonData")
 
     def test_load_dates(self):
         """Test load_dates function"""
@@ -83,7 +83,7 @@ class TestUtils:
         """Run all tests"""
         self.test_capitalize_name()
         self.test_load_config()
-        self.test_get_patient_data()
+        self.test_get_person_data()
         self.test_load_dates()
 
 TestUtils().test()

@@ -71,9 +71,9 @@ class AutoDownloadPdf:
     def download_file(self, ):
         file_name = ""
         text = utils.read_text_at_position([257,51, 644, 73])
-        patient = utils.get_patient_data(text)
-        if patient:
-            file_name = f"{patient['name']} {patient['dob']}"
+        person = utils.get_person_data(text)
+        if person:
+            file_name = f"{person['name']} {person['dob']}"
             
         pag.click(597, 124)  # "Afdrukken"
         pag.click(627, 235)  # "Nota view"
@@ -109,7 +109,7 @@ class AutoDownloadPdf:
             pag.click(2543, 91) # Close dossier
 
         else:
-            print("Patient info not found")
+            print("Person info not found")
             return 0
 
         return 1

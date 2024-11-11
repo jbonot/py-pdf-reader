@@ -80,7 +80,7 @@ def load_dates(file_path):
 
     return dates
 
-def get_patient_data(text):
+def get_person_data(text):
     match = re.match(r"(\d{1,2}j) \((\d{1,2})/(\d{1,2})/(\d{4})\) ([\w\s,]+) \((\w+)\)", text)
     if match:
         return {

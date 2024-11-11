@@ -43,7 +43,7 @@ class TestAutoDownloadPdf:
         self.assert_test(result, 'TestGoToCalendar')
 
     def test_go_to_dossier(self):
-        """Test GoToPatient function"""
+        """Test GoToDossier function"""
         result = self.app.go_to_dossier(0, 0) 
         self.assert_test(result, 'TestGoToDossier')
 
@@ -57,7 +57,7 @@ class TestAutoDownloadPdf:
 
         # To-do
         # self.test_go_to_report()
-        # self.test_go_to_patient()
+        # self.test_go_to_person()
 
 # Run tests
 TestAutoDownloadPdf().run_tests()
