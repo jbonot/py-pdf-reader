@@ -7,22 +7,7 @@ from PIL import Image, ImageGrab
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 # Define application bounding box
-application_bounding_box = {
-    'x': 0,
-    'y': 74,
-    'width': 2560,
-    'height': 1326
-}
-
-def activate_window(window_title_start):
-    from pywinauto import Desktop
-    try:
-        window = Desktop(backend="uia").window(title_re=window_title_start)
-        window.set_focus()
-        return True
-    except Exception as e:
-        print(f"Window not found: {window_title_start}")
-        return False
+application_bounding_box = [0, 74, 2560, 1400]
 
 def capitalize_name(name):
     words = name.split()
