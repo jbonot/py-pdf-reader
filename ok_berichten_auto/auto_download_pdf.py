@@ -55,13 +55,14 @@ class AutoDownloadPdf:
 
         # Enter day, month, and year
         pag.typewrite(entry['day'])
-        time.sleep(0.5)
+        pag.sleep(0.1)
         pag.typewrite(entry['month'])
-        time.sleep(0.5)
+        pag.sleep(0.1)
         pag.typewrite(entry['year'])
-        time.sleep(0.5)
-        pag.press('tab')
-        pag.press('space')
+
+        pag.click(1338, 786)
+        pag.sleep(3)
+        return 1
 
     def go_to_report(self, date):
         # Click necessary elements for navigating to the report
@@ -84,9 +85,7 @@ class AutoDownloadPdf:
         if file_name:
             if self.pdf_destination and not self.is_file_destination_set:
                 # Set destination
-                pag.keyDown('alt')
-                pag.press('d')
-                pag.keyUp('alt')
+                pag.hotkey('alt', 'd')
                 pag.typewrite(self.config['pdfDestination'])
                 pag.press('enter')
 
