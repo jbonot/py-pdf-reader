@@ -1,7 +1,3 @@
-import os
-import re
-import json
-
 from ok_berichten_auto.utils import capitalize_name, get_hocr_content, get_patient_data, load_config, load_dates
 
 class TestUtils:
