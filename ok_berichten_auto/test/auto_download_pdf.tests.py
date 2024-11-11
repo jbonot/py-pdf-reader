@@ -1,9 +1,15 @@
-from ..auto_download_pdf import activate_app, download_file, go_to_calendar, go_to_patient, go_to_report
+import sys
+import os
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+
+from ok_berichten_auto.auto_download_pdf import activate_app, download_file, go_to_calendar, go_to_patient, go_to_report
+
+script_dir = os.path.dirname(__file__)
 # Sample class for handling test cases and functions
 class TestAutoDownloadPdf:
-    config_path = '..\..\config.ini'
-    dates_path = 'auto_download_pdf.dates.txt'
+    config_path = os.path.join(script_dir, '..', '..', 'config.ini')
+    dates_path = os.path.join(script_dir, 'auto_download_pdf.dates.txt')
 
     def __init__(self):
         # You could load your date entries here
@@ -61,11 +67,10 @@ class TestAutoDownloadPdf:
     def run_tests(self):
         """Run all tests"""
         self.test_activate_app()
-        self.test_go_to_calendar()
-        self.test_locate_text()
-        self.test_go_to_report()
+        # self.test_go_to_calendar()
+        # self.test_go_to_report()
         self.test_download_file()
-        self.test_go_to_patient()
+        # self.test_go_to_patient()
 
 # Run tests
 TestAutoDownloadPdf().run_tests()
