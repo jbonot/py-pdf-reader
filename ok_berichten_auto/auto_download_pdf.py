@@ -13,6 +13,10 @@ class AutoDownloadPdf:
         self.config = utils.load_config(config_path)
         self.date_entries = utils.load_dates(dates_path)
 
+        if 'pdfDestination' in self.config and len(self.config['pdfDestination'].strip()) > 1:
+            self.pdf_destination = self.config['pdfDestination']
+            self.is_file_destination_set = False
+
     def download_all_entries(self):
         for entry in self.date_entries:
             self.go_to_calendar(entry)
@@ -79,7 +83,7 @@ class AutoDownloadPdf:
         if file_name:
             print(file_name)
 
-            if 'pdfDestination' in self.config and len(self.config['pdfDestination'].strip()) > 1:
+            if self.pdf_destination and not self.is_file_destination_set:
                 # Set destination
                 pag.keyDown('alt')
                 pag.press('d')
@@ -94,6 +98,16 @@ class AutoDownloadPdf:
 
             pag.typewrite(file_name)
             pag.press('enter')  # "Opslaan" (Save)
+            time.sleep(1)
+
+            # If the file exists, cancel saving
+            text = utils.read_text_at_position([1093, 603, 1222, 627])
+            if text.strip() == "Opslaan als bevestigen":
+                pag.press('enter') # "Nee"
+                pag.press('esc')
+            else:
+                self.is_file_destination_set = True
+
         else:
             print("Patient info not found")
             return 0
