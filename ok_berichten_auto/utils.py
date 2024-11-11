@@ -7,7 +7,7 @@ from PIL import Image, ImageGrab
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 # Define application bounding box
-application_bounding_box = [0, 74, 2560, 1400]
+application_bounding_box = (0, 74, 2560, 1400)
 
 def capitalize_name(name):
     words = name.split()
@@ -90,29 +90,24 @@ def get_patient_data(text):
         }
     return None
 
-def get_hocr_content(bbox):
-    # Capture screen region specified by bounding box
-    screenshot = ImageGrab.grab(bbox=(bbox['x'], bbox['y'], bbox['x'] + bbox['width'], bbox['y'] + bbox['height']))
-    file_path = "tmp.png"
-    screenshot.save(file_path)
 
-    # Run Tesseract OCR to get HOCR output
-    hocr_output = pytesseract.image_to_pdf_or_hocr(Image.open(file_path), extension='hocr')
-    with open("output.hocr", "wb") as f:
+def generate_screenshot(bbox):
+    screenshot = ImageGrab.grab(bbox=bbox)
+    file_path = os.path.join("tmp", "sceenshot.png")
+    screenshot.save(file_path)
+    return Image.open(file_path)
+
+def get_hocr_content(bbox):
+    hocr_output = pytesseract.image_to_pdf_or_hocr(generate_screenshot(bbox), extension='hocr', lang="nld+fra")
+    output_path = os.path.join("tmp", "screenshot.hocr")
+    with open(output_path, "wb") as f:
         f.write(hocr_output)
-    
-    # Read and return HOCR content
-    with open("output.hocr", "r", encoding='utf-8') as f:
+
+    with open(output_path, "r", encoding='utf-8') as f:
         return f.read()
 
 def read_text_at_position(bbox):
-    # Capture screen region specified by bounding box
-    screenshot = ImageGrab.grab(bbox=bbox)
-    file_path = "tmp.png"
-    screenshot.save(file_path)
-
-    # Run Tesseract OCR to get plain text
-    text_output = pytesseract.image_to_string(Image.open(file_path), lang="nld+fra")
+    text_output = pytesseract.image_to_string(generate_screenshot(bbox), lang="nld+fra")
     return text_output
 
 def locate_text_at_position(target_text, bbox=application_bounding_box):
