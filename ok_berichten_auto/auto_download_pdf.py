@@ -72,11 +72,11 @@ def download_file():
     pag.click(1430, 833)
     time.sleep(1)
     
-    
+    # To-Do: Save in specific folder
     if file_name:
         pag.typewrite(file_name)
         pag.press('tab')
-        pag.press('enter')  # "Opslaan" (Save)
+        # pag.press('enter')  # "Opslaan" (Save)
     else:
         print("Patient info not found")
         return 0
