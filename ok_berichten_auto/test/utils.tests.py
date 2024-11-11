@@ -3,7 +3,7 @@ import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
-from ok_berichten_auto.utils import capitalize_name, get_hocr_content, get_patient_data, load_config, load_dates
+import ok_berichten_auto.utils as utils
 
 script_dir = os.path.dirname(__file__)
 
@@ -28,12 +28,12 @@ class TestUtils:
             ["john doe", "John Doe"],
         ]
         for index, (input_name, expected) in enumerate(cases):
-            result = capitalize_name(input_name)
+            result = utils.capitalize_name(input_name)
             self.assert_test(result == expected, index, "TestCapitalizeName")
 
     def test_load_config(self):
         """Test load_config function"""
-        config = load_config(self.config_path)
+        config = utils.load_config(self.config_path)
         self.assert_test("windowTitle" in config, "key", "TestLoadConfig")
         self.assert_test(len(config.get("windowTitle").strip()) > 0, "value", "TestLoadConfig")
 
@@ -51,7 +51,7 @@ class TestUtils:
         ]
         
         for index, (input_text, expected_data) in enumerate(cases):
-            result = get_patient_data(input_text)
+            result = utils.get_patient_data(input_text)
             if result:
                 self.assert_test(
                     result['age'] == expected_data['age'] and
@@ -66,9 +66,9 @@ class TestUtils:
     def test_get_hocr_content(self):
         """Test get_hocr_content function"""
         application_bounding_box = {'x': 0, 'y': 74, 'width': 2560, 'height': 1326}
-        config = load_config(self.config_path)
+        config = utils.load_config(self.config_path)
         if 'windowTitle' in config:
-            get_hocr_content(application_bounding_box)
+            utils.get_hocr_content(application_bounding_box)
         else:
             print("Window Title missing in config.")
 
@@ -78,7 +78,7 @@ class TestUtils:
             {"fullDate": "03/05/2024", "day": "03", "month": "05", "year": "2024", "name": "Skywalker"},
             {"fullDate": "04/05/2024", "day": "04", "month": "05", "year": "2024", "name": "Solo"}
         ]
-        entries = load_dates(self.dates_path)
+        entries = utils.load_dates(self.dates_path)
         for index, entry in enumerate(entries):
             expected_entry = expected[index]
             self.assert_test(
