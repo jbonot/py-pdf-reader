@@ -1,9 +1,6 @@
 import pyautogui as pag
 import time
-import pytesseract
-from pytesseract import Output
-from datetime import datetime
-from pywinauto import Application, Desktop
+from pywinauto import Application
 
 from ok_berichten_auto.utils import get_patient_data, load_config, load_dates, locate_text_at_position
 

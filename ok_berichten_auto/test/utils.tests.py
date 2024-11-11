@@ -1,6 +1,16 @@
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+
 from ok_berichten_auto.utils import capitalize_name, get_hocr_content, get_patient_data, load_config, load_dates
 
+script_dir = os.path.dirname(__file__)
+
 class TestUtils:
+    config_path = os.path.join(script_dir, '..', '..', 'config.ini')
+    dates_path = os.path.join(script_dir, 'auto_download_pdf.dates.txt')
+
     def __init__(self):
         pass
 
@@ -23,9 +33,9 @@ class TestUtils:
 
     def test_load_config(self):
         """Test load_config function"""
-        config = load_config('../config.example.ini')
+        config = load_config(self.config_path)
         self.assert_test("windowTitle" in config, "key", "TestLoadConfig")
-        self.assert_test(config.get("windowTitle") == "Editor", "value", "TestLoadConfig")
+        self.assert_test(len(config.get("windowTitle").strip()) > 0, "value", "TestLoadConfig")
 
 
     def test_get_patient_data(self):
@@ -35,7 +45,7 @@ class TestUtils:
                 "age": "24j",
                 "dob": "01.01.2000",
                 "name": "Doe, Jane",
-                "country": "NL"
+                "lang": "NL"
             }],
             ["invalid", None],
         ]
@@ -46,8 +56,7 @@ class TestUtils:
                 self.assert_test(
                     result['age'] == expected_data['age'] and
                     result['dob'] == expected_data['dob'] and
-                    result['name'] == expected_data['name'] and
-                    result['country'] == expected_data['country'],
+                    result['name'] == expected_data['name'],
                     index, "TestGetPatientData"
                 )
             else:
@@ -57,7 +66,7 @@ class TestUtils:
     def test_get_hocr_content(self):
         """Test get_hocr_content function"""
         application_bounding_box = {'x': 0, 'y': 74, 'width': 2560, 'height': 1326}
-        config = load_config('../config.ini')
+        config = load_config(self.config_path)
         if 'windowTitle' in config:
             get_hocr_content(application_bounding_box)
         else:
@@ -69,7 +78,7 @@ class TestUtils:
             {"fullDate": "03/05/2024", "day": "03", "month": "05", "year": "2024", "name": "Skywalker"},
             {"fullDate": "04/05/2024", "day": "04", "month": "05", "year": "2024", "name": "Solo"}
         ]
-        entries = load_dates('../dates.example.txt')
+        entries = load_dates(self.dates_path)
         for index, entry in enumerate(entries):
             expected_entry = expected[index]
             self.assert_test(

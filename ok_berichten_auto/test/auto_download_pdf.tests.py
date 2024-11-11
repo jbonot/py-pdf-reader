@@ -1,4 +1,4 @@
-from ok_berichten_auto.auto_download_pdf import activate_app, download_file, go_to_calendar, go_to_patient, go_to_report
+from ..auto_download_pdf import activate_app, download_file, go_to_calendar, go_to_patient, go_to_report
 
 # Sample class for handling test cases and functions
 class TestAutoDownloadPdf:

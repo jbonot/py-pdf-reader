@@ -2,7 +2,6 @@ import os
 import re
 import pytesseract
 from PIL import Image, ImageGrab
-from datetime import datetime
 
 # Set up Tesseract executable path
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
@@ -30,30 +29,70 @@ def capitalize_name(name):
     capitalized = " ".join(word.capitalize() for word in words)
     return capitalized.strip()
 
-def load_config(filename):
+def load_config(file_path):
     config = {}
-    with open(filename, 'r') as f:
-        for line in f:
-            line = line.strip()
-            if line and not line.startswith(';'):
-                key, value = map(str.strip, line.split('=', 1))
-                config[key] = value
+    # Check if the file exists
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"Config file not found!")
+
+    # Read the content of the file
+    with open(file_path, 'r') as file:
+        config_content = file.read()
+
+    # Initialize a dictionary to hold the config data
+    config = {}
+
+    # Split the file content into lines and process each line
+    for line in config_content.splitlines():
+        line = line.strip()  # Trim whitespace
+
+        # Skip empty lines or comments (lines starting with ';')
+        if not line or line.startswith(';'):
+            continue
+
+        # Split the line into key and value
+        parts = line.split('=', 1)
+        if len(parts) == 2:
+            key = parts[0].strip()
+            value = parts[1].strip()
+            config[key] = value
+
     return config
 
-def load_dates(filename):
+def load_dates(file_path):
+    # Check if the file exists
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"Dates file not found!")
+
+    # Read the content of the file
+    with open(file_path, 'r') as file:
+        content = file.read()
+
+    # Split the content into lines
+    lines = content.splitlines()
+
+    # Initialize a list to store the date entries
     dates = []
-    with open(filename, 'r') as f:
-        for line in f:
-            if line.strip():
-                fields = line.split('\t')
-                date_parts = fields[1].split('/')
-                dates.append({
-                    'fullDate': fields[1],
-                    'day': date_parts[0],
-                    'month': date_parts[1],
-                    'year': date_parts[2],
-                    'name': fields[2]
-                })
+
+    # Process each line
+    for line in lines:
+        if not line:
+            continue  # Skip empty lines
+
+        # Split the line by tab
+        fields = line.split('\t')
+        date = fields[0].split('/')  # Split the date part by '/'
+        
+        # Store the structured date data
+        date_entry = {
+            'fullDate': fields[0],
+            'day': date[0],
+            'month': date[1],
+            'year': date[2],
+            'name': fields[1]
+        }
+        dates.append(date_entry)
+
     return dates
 
 def get_patient_data(text):
