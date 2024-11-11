@@ -21,8 +21,7 @@ class AutoDownloadPdf:
         for entry in self.date_entries:
             self.go_to_calendar(entry)
             
-            for coord in utils.locate_text_at_position(entry['name']):
-                pag.rightClick(coord['x'], coord['y'])
+            for (coord) in utils.locate_text_at_position(entry['name']):
                 self.go_to_patient(coord['x'], coord['y'])
                 self.go_to_report(entry['fullDate'])
                 self.download_file()
@@ -41,9 +40,9 @@ class AutoDownloadPdf:
             exit()
 
     def go_to_patient(self, start_x, start_y):
-        pag.click(start_x + 20, start_y + 5)  # "Selecteer patiënt" adjustment
-        # Additional clicks can be added here as required
-        # To-do: Save name via OCR before proceeding
+        pag.rightClick(start_x, start_y)
+        pag.click(start_x + 90, start_y + 32)  # "Selecteer patiënt"
+        pag.press('f6')
 
     def go_to_calendar(self, entry):
         pag.click(283, 33)  # "Afspraken"
