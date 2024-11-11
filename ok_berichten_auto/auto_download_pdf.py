@@ -21,8 +21,8 @@ class AutoDownloadPdf:
         for entry in self.date_entries:
             self.go_to_calendar(entry)
             
-            for (coord) in utils.locate_text_at_position(entry['name']):
-                self.go_to_patient(coord['x'], coord['y'])
+            for x, y in utils.locate_text_at_position(entry['name']):
+                self.go_to_dossier(x, y)
                 self.go_to_report(entry['fullDate'])
                 self.download_file()
                 

@@ -119,7 +119,7 @@ def locate_text_at_position(target_text, bbox=application_bounding_box):
         x1, y1, x2, y2 = map(int, match.groups())
         centerX = bbox['x'] + x1 + (x2 - x1) // 2
         centerY = bbox['y'] + y1 + (y2 - y1) // 2
-        matches.append({'x': centerX, 'y': centerY})
+        matches.append((centerX, centerY))
     
     return matches
 
