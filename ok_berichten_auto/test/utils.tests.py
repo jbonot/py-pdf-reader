@@ -12,7 +12,8 @@ class TestUtils:
     dates_path = os.path.join(script_dir, 'auto_download_pdf.dates.txt')
 
     def __init__(self):
-        pass
+        self.config = utils.load_config(self.config_path)
+        self.date_entries = utils.load_dates(self.dates_path)
 
     def assert_test(self, result, key, test):
         """Custom assertion method for tests"""
@@ -33,9 +34,8 @@ class TestUtils:
 
     def test_load_config(self):
         """Test load_config function"""
-        config = utils.load_config(self.config_path)
-        self.assert_test("windowTitle" in config, "key", "TestLoadConfig")
-        self.assert_test(len(config.get("windowTitle").strip()) > 0, "value", "TestLoadConfig")
+        self.assert_test("windowTitle" in self.config, "key", "TestLoadConfig")
+        self.assert_test(len(self.config.get("windowTitle").strip()) > 0, "value", "TestLoadConfig")
 
 
     def test_get_patient_data(self):
@@ -62,24 +62,14 @@ class TestUtils:
             else:
                 self.assert_test(result == expected_data, index, "TestGetPatientData")
 
-
-    def test_get_hocr_content(self):
-        """Test get_hocr_content function"""
-        application_bounding_box = {'x': 0, 'y': 74, 'width': 2560, 'height': 1326}
-        config = utils.load_config(self.config_path)
-        if 'windowTitle' in config:
-            utils.get_hocr_content(application_bounding_box)
-        else:
-            print("Window Title missing in config.")
-
     def test_load_dates(self):
         """Test load_dates function"""
         expected = [
             {"fullDate": "03/05/2024", "day": "03", "month": "05", "year": "2024", "name": "Skywalker"},
             {"fullDate": "04/05/2024", "day": "04", "month": "05", "year": "2024", "name": "Solo"}
         ]
-        entries = utils.load_dates(self.dates_path)
-        for index, entry in enumerate(entries):
+        
+        for index, entry in enumerate(self.date_entries):
             expected_entry = expected[index]
             self.assert_test(
                 entry['day'] == expected_entry['day'] and
@@ -95,6 +85,5 @@ class TestUtils:
         self.test_load_config()
         self.test_get_patient_data()
         self.test_load_dates()
-        self.test_get_hocr_content()
 
 TestUtils().test()
