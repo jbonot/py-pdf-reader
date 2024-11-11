@@ -26,7 +26,7 @@ class TestAutoDownloadPdf:
         """Test ActivateApp function"""
         result = self.app.activate_app()
         self.assert_test(result, 'TestActivateApp')
-    
+
     def test_download_file(self):
         """Test DownloadFile function"""
         result = self.app.download_file()
@@ -34,12 +34,12 @@ class TestAutoDownloadPdf:
 
     def test_go_to_report(self):
         """Test GoToReport function"""
-        result = self.app.go_to_report(self.entries[0]['fullDate'])  # Use the first entry for testing
+        result = self.app.go_to_report(self.app.date_entries[0]['fullDate'])  # Use the first entry for testing
         self.assert_test(result, 'TestGoToReport')
 
     def test_go_to_calendar(self):
         """Test GoToCalendar function"""
-        result = self.app.go_to_calendar(self.entries[0])  # Use the first entry for testing
+        result = self.app.go_to_calendar(self.app.date_entries[0])  # Use the first entry for testing
         self.assert_test(result, 'TestGoToCalendar')
 
     def test_go_to_patient(self):
@@ -50,9 +50,13 @@ class TestAutoDownloadPdf:
     def run_tests(self):
         """Run all tests"""
         self.test_activate_app()
-        # self.test_go_to_calendar()
+
+        # Success
+        self.test_go_to_calendar()
+        # self.test_download_file()
+
+        # To-do
         # self.test_go_to_report()
-        self.test_download_file()
         # self.test_go_to_patient()
 
 # Run tests
