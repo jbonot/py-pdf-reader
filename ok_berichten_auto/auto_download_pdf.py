@@ -76,14 +76,24 @@ class AutoDownloadPdf:
         pag.click(1430, 833)
         time.sleep(1)
         
-        # To-Do: Save in specific folder
         if file_name:
-            # config = load_config(filename)
-            # if 'pdfDestination' not in config
-            # location = config['pdfDestination']
+            print(file_name)
+
+            if 'pdfDestination' in self.config and len(self.config['pdfDestination'].strip()) > 1:
+                # Set destination
+                pag.keyDown('alt')
+                pag.press('d')
+                pag.keyUp('alt')
+                pag.typewrite(self.config['pdfDestination'])
+                pag.press('enter')
+
+                for _ in range(6):
+                    pag.press('tab')
+                
+                time.sleep(3)
+
             pag.typewrite(file_name)
-            pag.press('tab')
-            # pag.press('enter')  # "Opslaan" (Save)
+            pag.press('enter')  # "Opslaan" (Save)
         else:
             print("Patient info not found")
             return 0

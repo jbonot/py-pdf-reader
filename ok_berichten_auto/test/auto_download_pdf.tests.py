@@ -24,9 +24,9 @@ class TestAutoDownloadPdf:
 
     def test_activate_app(self):
         """Test ActivateApp function"""
-        result = self.app.activate_app(self.config_path)
+        result = self.app.activate_app()
         self.assert_test(result, 'TestActivateApp')
-
+    
     def test_download_file(self):
         """Test DownloadFile function"""
         result = self.app.download_file()
