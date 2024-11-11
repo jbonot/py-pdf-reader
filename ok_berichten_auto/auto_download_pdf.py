@@ -31,12 +31,13 @@ class AutoDownloadPdf:
                 self.go_to_calendar(entry)
 
     def activate_or_exit(self, title):
-        try:
-            app = Application().connect(title=title)
-            app_window = app[title]
-            app_window.set_focus()
-        except Exception:
-            print(f"Could not find window: {title}")
+        windows = find_windows(title_re=f"^{title}")
+        if windows:
+            app = Application().connect(handle=windows[0])
+            app.window(handle=windows[0]).set_focus()
+            return 1
+        else:
+            print(f"Window not found: {title}")
             exit()
 
     def go_to_patient(self, start_x, start_y):
@@ -48,7 +49,7 @@ class AutoDownloadPdf:
         pag.click(283, 33)  # "Afspraken"
         time.sleep(0.5)
         pag.click(360, 140)  # "Overzicht OK andere dag"
-        time.sleep(0.5)
+        time.sleep(1)
 
         self.activate_or_exit("Selecteer een datum")
 
@@ -120,12 +121,4 @@ class AutoDownloadPdf:
             print("Missing config: windowTitle")
             exit()
 
-        title = self.config['windowTitle']
-        windows = find_windows(title_re=f"^{title}")
-        if windows:
-            app = Application().connect(handle=windows[0])
-            app.window(handle=windows[0]).set_focus()
-            return 1
-        else:
-            print(f"Window not found: {title}")
-            exit()
+        self.activate_or_exit(self.config['windowTitle'])
