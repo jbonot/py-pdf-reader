@@ -1,15 +1,15 @@
 # -*- mode: python ; coding: utf-8 -*-
+from PyInstaller.utils.hooks import collect_data_files
 
-added_files = [
-    ('input', 'input'),
-    ('config.ini.example', '.')
-]
+datas = []
+datas += collect_data_files('TKinterModernThemes')
+
 
 a = Analysis(
     ['main.py'],
-    pathex=['.'],
+    pathex=[],
     binaries=[],
-    datas=added_files,
+    datas=datas,
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -26,7 +26,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='parse_pdfs',
+    name='PdfDataExtractor',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
