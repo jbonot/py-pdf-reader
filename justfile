@@ -6,8 +6,8 @@ build:
     pip freeze > requirements.txt
     pyinstaller app_themed.spec
 
-run mode="normal":
-    python {{ if mode == "debug" {'main.py --debug'} else if mode == "test" {'main.py'} else {'app_themed.py'} }}
+run:
+    python app_themed.py
 
 check:
     ruff check --fix
