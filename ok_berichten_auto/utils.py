@@ -1,5 +1,6 @@
 import os
 import re
+
 import pytesseract
 from PIL import Image, ImageGrab
 
@@ -9,19 +10,21 @@ pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tessera
 # Define application bounding box
 application_bounding_box = (0, 74, 2560, 1400)
 
+
 def capitalize_name(name):
     words = name.split()
     capitalized = " ".join(word.capitalize() for word in words)
     return capitalized.strip()
 
+
 def load_config(file_path):
     config = {}
     # Check if the file exists
     if not os.path.exists(file_path):
-        raise FileNotFoundError(f"Config file not found!")
+        raise FileNotFoundError("Config file not found!")
 
     # Read the content of the file
-    with open(file_path, 'r') as file:
+    with open(file_path, "r") as file:
         config_content = file.read()
 
     # Initialize a dictionary to hold the config data
@@ -32,11 +35,11 @@ def load_config(file_path):
         line = line.strip()  # Trim whitespace
 
         # Skip empty lines or comments (lines starting with ';')
-        if not line or line.startswith(';'):
+        if not line or line.startswith(";"):
             continue
 
         # Split the line into key and value
-        parts = line.split('=', 1)
+        parts = line.split("=", 1)
         if len(parts) == 2:
             key = parts[0].strip()
             value = parts[1].strip()
@@ -44,13 +47,14 @@ def load_config(file_path):
 
     return config
 
+
 def load_dates(file_path):
     # Check if the file exists
     if not os.path.exists(file_path):
-        raise FileNotFoundError(f"Dates file not found!")
+        raise FileNotFoundError("Dates file not found!")
 
     # Read the content of the file
-    with open(file_path, 'r') as file:
+    with open(file_path, "r") as file:
         content = file.read()
 
     # Split the content into lines
@@ -65,28 +69,31 @@ def load_dates(file_path):
             continue  # Skip empty lines
 
         # Split the line by tab
-        fields = line.split('\t')
-        date = fields[0].split('/')  # Split the date part by '/'
-        
+        fields = line.split("\t")
+        date = fields[0].split("/")  # Split the date part by '/'
+
         # Store the structured date data
         date_entry = {
-            'fullDate': fields[0],
-            'day': date[0],
-            'month': date[1],
-            'year': date[2],
-            'name': fields[1]
+            "fullDate": fields[0],
+            "day": date[0],
+            "month": date[1],
+            "year": date[2],
+            "name": fields[1],
         }
         dates.append(date_entry)
 
     return dates
 
+
 def get_person_data(text):
-    match = re.match(r"(\d{1,2}j) \((\d{1,2})/(\d{1,2})/(\d{4})\) ([\w\s,]+) \((\w+)\)", text)
+    match = re.match(
+        r"(\d{1,2}j) \((\d{1,2})/(\d{1,2})/(\d{4})\) ([\w\s,]+) \((\w+)\)", text
+    )
     if match:
         return {
-            'age': match.group(1),
-            'dob': f"{match.group(2)}.{match.group(3)}.{match.group(4)}",
-            'name': capitalize_name(match.group(5).strip())
+            "age": match.group(1),
+            "dob": f"{match.group(2)}.{match.group(3)}.{match.group(4)}",
+            "name": capitalize_name(match.group(5).strip()),
         }
     return None
 
@@ -97,29 +104,35 @@ def generate_screenshot(bbox):
     screenshot.save(file_path)
     return Image.open(file_path)
 
+
 def get_hocr_content(bbox):
-    hocr_output = pytesseract.image_to_pdf_or_hocr(generate_screenshot(bbox), extension='hocr', lang="nld+fra")
+    hocr_output = pytesseract.image_to_pdf_or_hocr(
+        generate_screenshot(bbox), extension="hocr", lang="nld+fra"
+    )
     output_path = os.path.join("tmp", "screenshot.hocr")
     with open(output_path, "wb") as f:
         f.write(hocr_output)
 
-    with open(output_path, "r", encoding='utf-8') as f:
+    with open(output_path, "r", encoding="utf-8") as f:
         return f.read()
+
 
 def read_text_at_position(bbox):
     text_output = pytesseract.image_to_string(generate_screenshot(bbox), lang="nld+fra")
     return text_output
+
 
 def locate_text_at_position(target_text, bbox=application_bounding_box):
     matches = []
     hocr_content = get_hocr_content(bbox)
 
     # Search for target text in HOCR content using bounding box coordinates
-    for match in re.finditer(r'bbox\s(\d+)\s(\d+)\s(\d+)\s(\d+).*?' + re.escape(target_text), hocr_content):
+    for match in re.finditer(
+        r"bbox\s(\d+)\s(\d+)\s(\d+)\s(\d+).*?" + re.escape(target_text), hocr_content
+    ):
         x1, y1, x2, y2 = map(int, match.groups())
-        centerX = bbox['x'] + x1 + (x2 - x1) // 2
-        centerY = bbox['y'] + y1 + (y2 - y1) // 2
+        centerX = bbox["x"] + x1 + (x2 - x1) // 2
+        centerY = bbox["y"] + y1 + (y2 - y1) // 2
         matches.append((centerX, centerY))
-    
-    return matches
 
+    return matches

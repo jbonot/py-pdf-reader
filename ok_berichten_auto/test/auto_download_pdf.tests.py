@@ -1,19 +1,18 @@
-import sys
 import os
+import sys
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
 from ok_berichten_auto.auto_download_pdf import AutoDownloadPdf
 
+
 # Sample class for handling test cases and functions
 class TestAutoDownloadPdf:
-
     def __init__(self):
         script_dir = os.path.dirname(__file__)
-        config_path = os.path.join(script_dir, '..', '..', 'config.ini')
-        dates_path = os.path.join(script_dir, 'auto_download_pdf.dates.txt')
+        config_path = os.path.join(script_dir, "..", "..", "config.ini")
+        dates_path = os.path.join(script_dir, "auto_download_pdf.dates.txt")
         self.app = AutoDownloadPdf(config_path, dates_path)
-
 
     def assert_test(self, result, test):
         """Custom assert function for test results"""
@@ -25,27 +24,30 @@ class TestAutoDownloadPdf:
     def test_activate_app(self):
         """Test ActivateApp function"""
         result = self.app.activate_app()
-        self.assert_test(result, 'TestActivateApp')
+        self.assert_test(result, "TestActivateApp")
 
     def test_download_file(self):
         """Test DownloadFile function"""
         result = self.app.download_file()
-        self.assert_test(result, 'TestDownloadFile')
+        self.assert_test(result, "TestDownloadFile")
 
     def test_go_to_report(self):
         """Test GoToReport function"""
-        result = self.app.go_to_report(self.app.date_entries[0]['fullDate'])  # Use the first entry for testing
-        self.assert_test(result, 'TestGoToReport')
+        # Use the first entry for testing
+        result = self.app.go_to_report(self.app.date_entries[0]["fullDate"])
+        self.assert_test(result, "TestGoToReport")
 
     def test_go_to_calendar(self):
         """Test GoToCalendar function"""
-        result = self.app.go_to_calendar(self.app.date_entries[0])  # Use the first entry for testing
-        self.assert_test(result, 'TestGoToCalendar')
+        result = self.app.go_to_calendar(
+            self.app.date_entries[0]
+        )  # Use the first entry for testing
+        self.assert_test(result, "TestGoToCalendar")
 
     def test_go_to_dossier(self):
         """Test GoToDossier function"""
-        result = self.app.go_to_dossier(0, 0) 
-        self.assert_test(result, 'TestGoToDossier')
+        result = self.app.go_to_dossier(0, 0)
+        self.assert_test(result, "TestGoToDossier")
 
     def run_tests(self):
         """Run all tests"""
@@ -58,6 +60,7 @@ class TestAutoDownloadPdf:
         # To-do
         # self.test_go_to_report()
         # self.test_go_to_person()
+
 
 # Run tests
 TestAutoDownloadPdf().run_tests()
