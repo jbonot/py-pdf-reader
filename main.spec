@@ -6,7 +6,7 @@ datas += collect_data_files('TKinterModernThemes')
 
 
 a = Analysis(
-    ['app_themed.py'],
+    ['main.py'],
     pathex=[],
     binaries=[],
     datas=datas,

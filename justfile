@@ -4,10 +4,10 @@ set shell := ["cmd.exe", "/c"]
 build:
     just check
     pip freeze > requirements.txt
-    pyinstaller app_themed.spec
+    pyinstaller main.spec
 
 run:
-    python app_themed.py
+    python main.py
 
 check:
     ruff check --fix
