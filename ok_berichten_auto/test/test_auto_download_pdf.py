@@ -22,14 +22,11 @@ class TestAutoDownloadPdf:
         assert result
 
     def test_go_to_report(self):
-        # Use the first entry for testing
         result = self.app.go_to_report(self.app.date_entries[0]["fullDate"])
         assert result
 
     def test_go_to_calendar(self):
-        result = self.app.go_to_calendar(
-            self.app.date_entries[0]
-        )  # Use the first entry for testing
+        result = self.app.go_to_calendar(self.app.date_entries[0])
         assert result
 
     def test_go_to_dossier(self):
