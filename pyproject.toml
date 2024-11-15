@@ -4,3 +4,8 @@ indent-width = 4
 
 [tool.ruff.lint]
 select = ["I", "E", "F"]
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore::DeprecationWarning"
+]
