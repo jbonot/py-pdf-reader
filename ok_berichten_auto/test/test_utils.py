@@ -11,7 +11,6 @@ class TestUtils:
     dates_path = os.path.join(os.path.dirname(__file__), "auto_download_pdf.dates.txt")
 
     def test_capitalize_name(self):
-        """Test capitalize_name function"""
         cases = [
             ["JOHN DOE", "John Doe"],
             ["john doe", "John Doe"],
@@ -21,13 +20,11 @@ class TestUtils:
             assert result == expected
 
     def test_load_config(self):
-        """Test load_config function"""
         config = utils.load_config(self.config_path)
         assert "windowTitle" in config
         assert len(config.get("windowTitle").strip()) > 0
 
     def test_get_person_data(self):
-        """Test get_person_data function"""
         cases = [
             [
                 "24j (01/01/2000) DOE, JANE (NL)",
@@ -46,7 +43,6 @@ class TestUtils:
                 assert result == expected_data
 
     def test_load_dates(self):
-        """Test load_dates function"""
         expected = [
             {
                 "fullDate": "03/05/2024",
