@@ -4,7 +4,7 @@ from pathlib import Path
 
 import Levenshtein
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 from data_extractor.extract_scanned_pdf_text import extract_text_from_pdf
 
 data_path = os.path.join(Path(__file__).parent, "data")
