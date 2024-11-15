@@ -8,3 +8,6 @@ keywords_shoulder=subacromiale, decompressie, caput longum
 keywords_elbow=epicondylitis, elleboog, cubitale tunnel
 keywords_hand=DIP, arthrodese, pulley, cyste
 keywords_foot=calcaneumfractuur, hallux, valgus
+
+[Tests]
+test_auto_download_pdf=0
