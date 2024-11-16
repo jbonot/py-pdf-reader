@@ -3,6 +3,7 @@ import sys
 from pathlib import Path
 
 import Levenshtein
+import pytest
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
@@ -14,6 +15,10 @@ from data_extractor.extract_scanned_pdf_text import extract_text_from_pdf
 data_path = os.path.join(Path(__file__).parent, "data")
 
 
+@pytest.mark.skipif(
+    test_utils.should_skip("test_extract_scanned_pdf"),
+    reason="Tests disabled in config",
+)
 def test_accuracy():
     assert os.path.isdir(data_path)
     test_cases = os.listdir(data_path)
