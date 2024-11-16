@@ -1,12 +1,6 @@
 import os
 import re
 
-import pytesseract
-from PIL import Image, ImageGrab
-
-# Set up Tesseract executable path
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
-
 # Define application bounding box
 application_bounding_box = (0, 74, 2560, 1400)
 
@@ -96,43 +90,3 @@ def get_person_data(text):
             "name": capitalize_name(match.group(5).strip()),
         }
     return None
-
-
-def generate_screenshot(bbox):
-    screenshot = ImageGrab.grab(bbox=bbox)
-    file_path = os.path.join("tmp", "sceenshot.png")
-    screenshot.save(file_path)
-    return Image.open(file_path)
-
-
-def get_hocr_content(bbox):
-    hocr_output = pytesseract.image_to_pdf_or_hocr(
-        generate_screenshot(bbox), extension="hocr", lang="nld+fra"
-    )
-    output_path = os.path.join("tmp", "screenshot.hocr")
-    with open(output_path, "wb") as f:
-        f.write(hocr_output)
-
-    with open(output_path, "r", encoding="utf-8") as f:
-        return f.read()
-
-
-def read_text_at_position(bbox):
-    text_output = pytesseract.image_to_string(generate_screenshot(bbox), lang="nld+fra")
-    return text_output
-
-
-def locate_text_at_position(target_text, bbox=application_bounding_box):
-    matches = []
-    hocr_content = get_hocr_content(bbox)
-
-    # Search for target text in HOCR content using bounding box coordinates
-    for match in re.finditer(
-        r"bbox\s(\d+)\s(\d+)\s(\d+)\s(\d+).*?" + re.escape(target_text), hocr_content
-    ):
-        x1, y1, x2, y2 = map(int, match.groups())
-        centerX = bbox["x"] + x1 + (x2 - x1) // 2
-        centerY = bbox["y"] + y1 + (y2 - y1) // 2
-        matches.append((centerX, centerY))
-
-    return matches

@@ -1,5 +1,6 @@
 import time
 
+import ocrhelper
 import pyautogui as pag
 from pywinauto import Application
 from pywinauto.findwindows import find_windows
@@ -23,7 +24,7 @@ class AutoDownloadPdf:
         for entry in self.date_entries:
             self.go_to_calendar(entry)
 
-            for x, y in utils.locate_text_at_position(entry["name"]):
+            for x, y in ocrhelper.locate_text_at_position(entry["name"]):
                 self.go_to_dossier(x, y)
                 self.go_to_report(entry["fullDate"])
                 self.download_file()
@@ -71,7 +72,7 @@ class AutoDownloadPdf:
         self,
     ):
         file_name = ""
-        text = utils.read_text_at_position([257, 51, 644, 73])
+        text = ocrhelper.read_text_at_position([257, 51, 644, 73])
         person = utils.get_person_data(text)
         if person:
             file_name = f"{person['name']} {person['dob']}"
@@ -99,7 +100,7 @@ class AutoDownloadPdf:
             time.sleep(1)
 
             # If the file exists, cancel saving
-            text = utils.read_text_at_position([1093, 603, 1222, 627])
+            text = ocrhelper.read_text_at_position([1093, 603, 1222, 627])
             if text.strip() == "Opslaan als bevestigen":
                 pag.press("enter")  # "Nee"
                 pag.press("esc")
