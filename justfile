@@ -13,4 +13,4 @@ check:
     ruff check --fix
 
 test:
-    python .\test\extract_scanned_pdf_text.py > .\test\results.txt
+    pytest
