@@ -31,9 +31,6 @@ class AutoDownloadPdf:
                 self.go_to_report(entry["fullDate"])
                 self.download_file()
 
-                # To-do: Go back to calendar view
-                self.go_to_calendar(entry)
-
     def activate_or_exit(self, title):
         windows = find_windows(title_re=f"^{title}")
         if windows:
