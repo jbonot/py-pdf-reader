@@ -3,7 +3,7 @@ import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
-import ok_berichten_auto.utils as utils
+import task_automation.utils as utils
 
 
 class TestUtils:

@@ -4,7 +4,7 @@ import pyautogui as pag
 from pywinauto import Application
 from pywinauto.findwindows import find_windows
 
-import ok_berichten_auto.utils as utils
+import task_automation.utils as utils
 
 # Ensure you have installed required packages:
 # pip install pyautogui pytesseract pywinauto

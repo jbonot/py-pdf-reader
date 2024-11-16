@@ -5,8 +5,8 @@ import pytest
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
-from ok_berichten_auto.auto_download_pdf import AutoDownloadPdf
-from ok_berichten_auto.utils import load_config
+from task_automation.auto_download_pdf import AutoDownloadPdf
+from task_automation.utils import load_config
 
 script_dir = os.path.dirname(__file__)
 config_path = os.path.join(script_dir, "..", "..", "config.ini")
