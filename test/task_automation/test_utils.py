@@ -1,13 +1,15 @@
 import os
 import sys
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+
+import utils as test_utils
 
 import task_automation.utils as utils
 
 
 class TestUtils:
-    config_path = os.path.join(os.path.dirname(__file__), "..", "..", "config.ini")
     dates_path = os.path.join(os.path.dirname(__file__), "auto_download_pdf.dates.txt")
 
     def test_capitalize_name(self):
@@ -20,7 +22,7 @@ class TestUtils:
             assert result == expected
 
     def test_load_config(self):
-        config = utils.load_config(self.config_path)
+        config = utils.load_config(test_utils.config_path)
         assert "windowTitle" in config
         assert len(config.get("windowTitle").strip()) > 0
 

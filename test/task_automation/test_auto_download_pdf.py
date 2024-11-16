@@ -3,24 +3,22 @@ import sys
 
 import pytest
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
+import utils as test_utils
+
 from task_automation.auto_download_pdf import AutoDownloadPdf
-from task_automation.utils import load_config
 
 script_dir = os.path.dirname(__file__)
-config_path = os.path.join(script_dir, "..", "..", "config.ini")
 
 
-def should_skip():
-    config = load_config(config_path)
-    return config.get("test_auto_download_pdf") not in ("1", "True")
-
-
-@pytest.mark.skipif(should_skip(), reason="Tests disabled in config")
+@pytest.mark.skipif(
+    test_utils.should_skip("test_auto_download_pdf"), reason="Tests disabled in config"
+)
 class TestAutoDownloadPdf:
     dates_path = os.path.join(script_dir, "auto_download_pdf.dates.txt")
-    app = AutoDownloadPdf(config_path, dates_path)
+    app = AutoDownloadPdf(test_utils.config_path, dates_path)
 
     def test_activate_app(self):
         result = self.app.activate_app()
