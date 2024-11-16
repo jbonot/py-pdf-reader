@@ -6,9 +6,6 @@ from pywinauto.findwindows import find_windows
 
 import task_automation.utils as utils
 
-# Ensure you have installed required packages:
-# pip install pyautogui pytesseract pywinauto
-
 
 class AutoDownloadPdf:
     def __init__(self, config_path, dates_path):
