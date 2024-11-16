@@ -1,10 +1,8 @@
-input/*
-output/*
 build/*
 config.ini
 !.gitkeep
 __pycache__/
-test/data
+test/*/data
 tmp
 # editor settings
 .vscode
