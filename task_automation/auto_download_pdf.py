@@ -69,6 +69,12 @@ class AutoDownloadPdf:
 
     def go_to_report(self, date):
         # Click necessary elements for navigating to the report
+        # To-do: check bbox
+        tree_hocr = ocrhelper.get_hocr_from_bbox(
+            [28, 296, 235, 2024],
+            should_process=True,
+            tesseract_params=tesseract_params,
+        )
         # Implementation depends on the exact GUI layout
         return 0
 
