@@ -99,9 +99,11 @@ class AutoDownloadPdf:
         # To-Do: Check if double-click is possible, or if need to click on node
         pag.doubleClick(center_x, center_y)
 
-        # To-do: Get sub item
+        # To-do: Check accuracy
+        pag.sleep(0.5)
+        pag.doubleClick(center_x, center_y + 32)
 
-        return 0
+        return 1
 
     def download_file(
         self,
