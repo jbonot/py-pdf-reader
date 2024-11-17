@@ -7,6 +7,8 @@ from pywinauto.findwindows import find_windows
 
 import task_automation.utils as utils
 
+tesseract_params = {"lang": "nld+fra"}
+
 
 class AutoDownloadPdf:
     def __init__(self, config_path, dates_path):
@@ -24,7 +26,9 @@ class AutoDownloadPdf:
         for entry in self.date_entries:
             self.go_to_calendar(entry)
 
-            for x, y in ocrhelper.locate_text_at_position(entry["name"]):
+            for x, y in ocrhelper.locate_text_at_position(
+                entry["name"], should_process=True, tesseract_params=tesseract_params
+            ):
                 self.go_to_dossier(x, y)
                 self.go_to_report(entry["fullDate"])
                 self.download_file()
@@ -72,7 +76,9 @@ class AutoDownloadPdf:
         self,
     ):
         file_name = ""
-        text = ocrhelper.read_text_at_position([257, 51, 644, 73])
+        text = ocrhelper.read_text_at_position(
+            [257, 51, 644, 73], tesseract_params=tesseract_params
+        )
         person = utils.get_person_data(text)
         if person:
             file_name = f"{person['name']} {person['dob']}"
@@ -100,7 +106,9 @@ class AutoDownloadPdf:
             time.sleep(1)
 
             # If the file exists, cancel saving
-            text = ocrhelper.read_text_at_position([1093, 603, 1222, 627])
+            text = ocrhelper.read_text_at_position(
+                [1093, 603, 1222, 627], tesseract_params=tesseract_params
+            )
             if text.strip() == "Opslaan als bevestigen":
                 pag.press("enter")  # "Nee"
                 pag.press("esc")
