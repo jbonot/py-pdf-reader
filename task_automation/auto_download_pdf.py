@@ -31,7 +31,7 @@ class AutoDownloadPdf:
                 entry["name"], should_process=True, tesseract_params=tesseract_params
             ):
                 self.go_to_dossier(x, y)
-                self.go_to_report(entry["fullDate"])
+                self.go_to_report()
                 self.download_file()
 
     def activate_or_exit(self, title):
@@ -68,7 +68,7 @@ class AutoDownloadPdf:
         pag.sleep(3)
         return 1
 
-    def go_to_report(self, date):
+    def go_to_report(self):
         # Click necessary elements for navigating to the report
         # To-do: check bbox
         tree_hocr = ocrhelper.get_hocr_from_bbox(
