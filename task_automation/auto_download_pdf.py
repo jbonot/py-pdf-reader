@@ -82,7 +82,7 @@ class AutoDownloadPdf:
         self,
     ):
         file_name = ""
-        text = ocrhelper.read_text_at_position(
+        text = ocrhelper.read_text_in_bbox(
             [257, 51, 644, 73], tesseract_params=tesseract_params
         )
         person = utils.get_person_data(text)
