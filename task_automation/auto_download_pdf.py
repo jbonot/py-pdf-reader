@@ -2,6 +2,7 @@ import time
 
 import ocrhelper
 import pyautogui as pag
+from lxml import etree
 from pywinauto import Application
 from pywinauto.findwindows import find_windows
 
@@ -75,7 +76,31 @@ class AutoDownloadPdf:
             should_process=True,
             tesseract_params=tesseract_params,
         )
-        # Implementation depends on the exact GUI layout
+
+        elements = etree.fromstring(tree_hocr, etree.HTMLParser()).xpath(
+            '//*[contains(text(), "Orthopedie")]'
+        )
+
+        if not elements:
+            print("No element with text 'Orthopedie' found.")
+            return 0
+
+        title_attr = elements[0].get("title")
+
+        if not title_attr or "bbox" not in title_attr:
+            print("BBox not found in the title attribute.")
+            return 0
+
+        bbox = title_attr.split("bbox")[-1].split(";")[0].strip()
+        bbox_coords = list(map(int, bbox.split()))
+        center_x = (bbox_coords[0] + bbox_coords[2]) / 2
+        center_y = (bbox_coords[1] + bbox_coords[3]) / 2
+
+        # To-Do: Check if double-click is possible, or if need to click on node
+        pag.doubleClick(center_x, center_y)
+
+        # To-do: Get sub item
+
         return 0
 
     def download_file(
