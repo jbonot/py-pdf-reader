@@ -2,13 +2,12 @@ import time
 
 import ocrhelper
 import pyautogui as pag
-from lxml import etree
 from pywinauto import Application
 from pywinauto.findwindows import find_windows
 
 import task_automation.utils as utils
 
-tesseract_params = {"lang": "nld+fra"}
+tesseract_args = {"lang": "nld+fra"}
 
 
 class AutoDownloadPdf:
@@ -27,9 +26,14 @@ class AutoDownloadPdf:
         for entry in self.date_entries:
             self.go_to_calendar(entry)
 
-            for x, y in ocrhelper.locate_text_at_position(
-                entry["name"], should_process=True, tesseract_params=tesseract_params
-            ):
+            matches = ocrhelper.locate_text_within_bbox(
+                str(entry["name"]).upper(),
+                [90, 185, 1190, 1385],
+                processing_args={"color_mask": ([120, 50, 50], [150, 255, 255])},
+                tesseract_args=tesseract_args,
+            )
+
+            for x, y in matches:
                 self.go_to_dossier(x, y)
                 self.go_to_report()
                 self.download_file()
@@ -71,30 +75,15 @@ class AutoDownloadPdf:
     def go_to_report(self):
         # Click necessary elements for navigating to the report
         # To-do: check bbox
-        tree_hocr = ocrhelper.get_hocr_from_bbox(
-            [28, 296, 235, 2024],
-            should_process=True,
-            tesseract_params=tesseract_params,
+        results = ocrhelper.locate_text_within_bbox(
+            "Orthopedie", [28, 296, 235, 2024], {}, tesseract_args=tesseract_args
         )
 
-        elements = etree.fromstring(tree_hocr, etree.HTMLParser()).xpath(
-            '//*[contains(text(), "Orthopedie")]'
-        )
-
-        if not elements:
+        if len(results) == 0:
             print("No element with text 'Orthopedie' found.")
             return 0
 
-        title_attr = elements[0].get("title")
-
-        if not title_attr or "bbox" not in title_attr:
-            print("BBox not found in the title attribute.")
-            return 0
-
-        bbox = title_attr.split("bbox")[-1].split(";")[0].strip()
-        bbox_coords = list(map(int, bbox.split()))
-        center_x = (bbox_coords[0] + bbox_coords[2]) / 2
-        center_y = (bbox_coords[1] + bbox_coords[3]) / 2
+        center_x, center_y = results[0]
 
         # To-Do: Check if double-click is possible, or if need to click on node
         pag.doubleClick(center_x, center_y)
@@ -110,7 +99,7 @@ class AutoDownloadPdf:
     ):
         file_name = ""
         text = ocrhelper.read_text_in_bbox(
-            [257, 51, 644, 73], tesseract_params=tesseract_params
+            [257, 51, 644, 73], tesseract_args=tesseract_args
         )
         person = utils.get_person_data(text)
         if person:
@@ -139,8 +128,8 @@ class AutoDownloadPdf:
             time.sleep(1)
 
             # If the file exists, cancel saving
-            text = ocrhelper.read_text_at_position(
-                [1093, 603, 1222, 627], tesseract_params=tesseract_params
+            text = ocrhelper.read_text_in_bbox(
+                [1093, 603, 1222, 627], tesseract_args=tesseract_args
             )
             if text.strip() == "Opslaan als bevestigen":
                 pag.press("enter")  # "Nee"
