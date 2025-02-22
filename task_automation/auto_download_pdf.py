@@ -1,10 +1,11 @@
+import re
 import time
 
-import ocrhelper
 import pyautogui as pag
 from pywinauto import Application
 from pywinauto.findwindows import find_windows
 
+import ocrhelper
 import task_automation.utils as utils
 
 tesseract_args = {"lang": "nld+fra"}
@@ -38,8 +39,8 @@ class AutoDownloadPdf:
                 self.go_to_report()
                 self.download_file()
 
-    def activate_or_exit(self, title):
-        windows = find_windows(title_re=f"^{title}")
+    def activate_or_exit(self, title):        
+        windows = find_windows(title_re=f".*{re.escape(title)}.*")
         if windows:
             app = Application().connect(handle=windows[0])
             app.window(handle=windows[0]).set_focus()
@@ -151,4 +152,4 @@ class AutoDownloadPdf:
             print("Missing config: windowTitle")
             exit()
 
-        self.activate_or_exit(self.config["windowTitle"])
+        return self.activate_or_exit(self.config["windowTitle"])
